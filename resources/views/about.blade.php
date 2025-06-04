@@ -1,5 +1,5 @@
 @extends('layout.app')
- hello
+
 @section('content')
 <div class=" py-12" data-aos="fade-up" data-aos-duration="800">
     <div class="container mx-auto px-6">
