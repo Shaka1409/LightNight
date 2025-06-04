@@ -52,7 +52,7 @@
                     <p class="text-gray-600">
                         Mỗi sản phẩm là một tác phẩm nghệ thuật, kết hợp giữa thẩm mỹ và công năng.
                     </p>
-                </div>hi kffk
+                </div>
                 <div class="p-4">
                     <i class="fas fa-shield-alt text-blue-500 text-3xl mb-4"></i>
                     <h4 class="text-lg font-bold text-gray-800 mb-2">Chất lượng vượt trội</h4>
