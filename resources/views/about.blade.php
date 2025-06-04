@@ -39,22 +39,7 @@
                 </div>
             </div>            
         </div>
-        <!-- End Video and Text Section -->
-        <div class="mt-12 text-center" data-aos="fade-up" data-aos-duration="800">
-            <h3 class="text-2xl font-semibold text-gray-800 mb-6">
-                Sứ mệnh của chúng tôi
-            </h3>
-            <p class="text-gray-600 mb-4">
-                Chúng tôi cam kết mang đến những sản phẩm chiếu sáng chất lượng cao, thiết kế tinh tế và thân thiện với môi trường, nhằm nâng cao trải nghiệm sống của khách hàng.
-            </p>
-            <p class="text-gray-600 mb-4">
-                Với đội ngũ chuyên gia giàu kinh nghiệm, LightNight không ngừng nghiên cứu và phát triển các giải pháp chiếu sáng thông minh, đáp ứng nhu cầu ngày càng cao của người tiêu dùng.
-            </p>
-            <p class="text-gray-600 mb-4">
-                Chúng tôi tin rằng ánh sáng không chỉ là nguồn năng lượng, mà còn là nguồn cảm hứng, giúp mỗi không gian trở nên sống động và đầy sức sống.
-            </p>
-        </div>
-        <!-- End Mission Section -->
+
         <!-- Additional Section -->
         <div class="mt-12 text-center" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
             <h3 class="text-2xl font-semibold text-gray-800 mb-6">
