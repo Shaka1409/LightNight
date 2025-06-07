@@ -69,7 +69,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Blog Posts Section -->
         @if($blogs->isNotEmpty())
         <div class="mt-12 text-center" data-aos="fade-up" data-aos-duration="800" data-aos-delay="600">
@@ -94,6 +93,6 @@
             <a href="{{ url('/contact') }}" class="inline-block bg-blue-500 text-white mb-4 px-6 py-3 rounded-md sm:hover:bg-blue-600 transition duration-300 font-semibold">
                 Liên hệ ngay </a>
     </div>
-</div>
+</>
 </div>
 @endsection
