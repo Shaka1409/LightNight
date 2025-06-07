@@ -69,7 +69,6 @@
                 </div>
             </div>
         </div>
-<div>fuck</div>
         <!-- Blog Posts Section -->
         @if($blogs->isNotEmpty())
         <div class="mt-12 text-center" data-aos="fade-up" data-aos-duration="800" data-aos-delay="600">
