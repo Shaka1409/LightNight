@@ -20,28 +20,31 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
     }
-
+    public function register()
+    {
+        return view('auth.register');
+    }
     protected function validator(array $data)
-{
-    return Validator::make($data, [
-        'name'     => ['required', 'string', 'max:255'],
-        'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
-        'phone'    => ['nullable', 'string', 'max:20'],
-        'address'  => ['nullable', 'string', 'max:255'],
-        'password' => ['required', 'string', 'min:8', 'confirmed'],
-    ], [
-        'name.required'     => 'Vui lòng nhập họ và tên.',
-        'name.max'          => 'Họ và tên không được vượt quá 255 ký tự.',
-        'email.required'    => 'Vui lòng nhập email.',
-        'email.email'       => 'Địa chỉ email không hợp lệ.',
-        'email.unique'      => 'Email này đã được sử dụng.',
-        'phone.max'         => 'Số điện thoại không được vượt quá 20 ký tự.',
-        'address.max'       => 'Địa chỉ không được vượt quá 255 ký tự.',
-        'password.required' => 'Vui lòng nhập mật khẩu.',
-        'password.min'      => 'Mật khẩu phải có ít nhất 8 ký tự.',
-        'password.confirmed'=> 'Xác nhận mật khẩu không khớp.',
-    ]);
-}
+    {
+        return Validator::make($data, [
+            'name'     => ['required', 'string', 'max:255'],
+            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone'    => ['nullable', 'string', 'max:20'],
+            'address'  => ['nullable', 'string', 'max:255'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ], [
+            'name.required'     => 'Vui lòng nhập họ và tên.',
+            'name.max'          => 'Họ và tên không được vượt quá 255 ký tự.',
+            'email.required'    => 'Vui lòng nhập email.',
+            'email.email'       => 'Địa chỉ email không hợp lệ.',
+            'email.unique'      => 'Email này đã được sử dụng.',
+            'phone.max'         => 'Số điện thoại không được vượt quá 20 ký tự.',
+            'address.max'       => 'Địa chỉ không được vượt quá 255 ký tự.',
+            'password.required' => 'Vui lòng nhập mật khẩu.',
+            'password.min'      => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
+        ]);
+    }
     protected function create(array $data)
     {
         $user = User::create([

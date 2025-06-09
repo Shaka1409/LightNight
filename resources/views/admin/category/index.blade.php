@@ -5,7 +5,7 @@
         @if (request('q') && $categories->count() === 0)
             <p class="text-danger mb-2 mt-2">Không tìm thấy kết quả cho: "{{ request('q') }}"</p>
         @elseif (count($categories) > 0)
-            <a class="btn btn-primary mb-3" href="{{ route('category.create') }}" role="button">Thêm danh mục đèn ngủ</a>
+            <a class="btn btn-primary mb-3" href="{{ route('category.create') }}" role="button">Thêm danh mục</a>
             @if (request('q') && $categories->count() > 0)
                 <p class="text-muted mb-2 mt-2">Kết quả tìm kiếm cho: "{{ request('q') }}"</p>
             @endif

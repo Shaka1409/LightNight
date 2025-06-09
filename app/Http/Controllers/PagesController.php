@@ -36,10 +36,13 @@ class PagesController extends Controller
 
     public function show()
     {
-        $categories = Category::with(['products' => function ($query) {
-            $query->whereIn('status', [0, 1]);
-        }])
-            ->where('status', 1)
+        $categories = Category::where('status', 1)
+            ->whereHas('products', function ($query) {
+                $query->whereIn('status', [0, 1]);
+            })
+            ->with(['products' => function ($query) {
+                $query->whereIn('status', [0, 1]);
+            }])
             ->get();
         $allProducts = Product::with('category')
             ->whereIn('status', [0, 1])
@@ -89,7 +92,7 @@ class PagesController extends Controller
         $shareTitle = $product->name;
         $shareDescription = \Illuminate\Support\Str::limit(strip_tags($product->description), 150);
         $shareImage = $product->image ? asset('storage/' . $product->image) : asset('default-image.jpg');
-       
+
         return view('detail', compact('product', 'categories', 'shareUrl', 'shareTitle', 'shareDescription', 'shareImage'));
     }
 
@@ -120,13 +123,13 @@ class PagesController extends Controller
         return view('search', compact('categories', 'products', 'query'));
     }
 
-    public function about()
+    public function news()
     {
         // Lấy tất cả bài viết blog, sắp xếp theo thời gian tạo giảm dần
         $blogs = Blogs::orderBy('created_at', 'desc')->get();
-        $banners = Banners::where('position', '8')->get();
+        $banners = Banners::whereIn('position', [6, 7, 8])->get()->keyBy('position');
         // Trả về view about.blade.php và truyền biến $blogs sang
-        return view('about', compact('blogs', 'banners'));
+        return view('news', compact('blogs', 'banners'));
     }
 
     public function blog($id)

@@ -15,7 +15,7 @@
                             <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}"
                                 class="w-full h-full object-cover transition-all duration-500 transform sm:hover:scale-110">
                             <div class="absolute bottom-0 bg-black bg-opacity-50 text-white w-full text-center py-2">
-                                {{ $product->name }}
+                                {{ mb_strtoupper(mb_substr($product->name, 0, 1, encoding: 'UTF-8'), 'UTF-8') . mb_substr($product->name, 1, null, 'UTF-8') }}
                             </div>
                         </div>
                     @elseif ($index === 1 || $index === 2)
@@ -28,7 +28,7 @@
                             <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}"
                                 class="w-full h-full object-cover transition-all duration-500 transform sm:hover:scale-110">
                             <div class="absolute bottom-0 text-[10px] sm:text-sm bg-black bg-opacity-50 text-white w-full text-center py-2">
-                                {{ $product->name }}
+                                {{ mb_strtoupper(mb_substr($product->name, 0, 1, encoding: 'UTF-8'), 'UTF-8') . mb_substr($product->name, 1, null, 'UTF-8') }}
                             </div>
                         </div>
                         @if ($index === 2)
@@ -45,22 +45,22 @@
     <div class="flex flex-wrap">
         <!-- Nút mở menu (Hiện ở mobile) -->
         <button id="toggleSidebar"
-            class="md:hidden fixed sm:top-10 top-4 left-4 z-10 mt-14 bg-blue-600/70 text-white p-2 rounded-full shadow-lg">
+            class="lg:hidden fixed sm:top-10 top-4 left-4 z-10 mt-14 bg-blue-600/70 text-white p-2 rounded-full shadow-lg">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
             </svg>
         </button>
         <!-- Backdrop cho danh mục (ẩn mặc định) -->
         <div id="category-backdrop"
-            class="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 hidden transition-opacity duration-300 md:hidden">
+            class="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 hidden transition-opacity duration-300 lg:hidden">
         </div>
 
         <!-- Sidebar -->
         <div id="sidebarMenu"
-            class="w-3/5 md:w-1/5 p-3 bg-white shadow-xl sm:mr-3 z-40 md:z-10 overflow-y-auto fixed h-screen left-0 top-0
-    md:sticky md:top-20 lg:top-28 md:self-start md:max-h-screen md:overflow-y-auto
+            class="w-3/5 md:w-2/5 lg:w-1/5 p-3 bg-white shadow-xl sm:mr-3 z-40 lg:z-10 overflow-y-auto fixed h-screen left-0 top-0
+    lg:sticky lg:top-28 lg:self-start lg:max-h-screen lg:overflow-y-auto
     transition-transform duration-300
-    -translate-x-full md:translate-x-0">
+    -translate-x-full lg:translate-x-0">
 
 
             <h2 class="text-sm md:text-base font-semibold mb-4 text-blue-600 flex items-center">
@@ -82,7 +82,7 @@
                 @foreach ($categories as $category)
                     <li class="cursor-pointer text-sm font-medium py-2 px-3 bg-gray-100 text-gray-700 sm:hover:bg-gray-200 transition rounded-lg flex items-center justify-between category-filter"
                         data-category="{{ $category->id }}">
-                        <span class="whitespace-normal line-clamp">{{ $category->name }}</span>
+                        <span class="whitespace-normal line-clamp">{{ mb_convert_case($category->name, MB_CASE_TITLE, 'UTF-8') }}</span>
                         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
@@ -111,12 +111,8 @@
                         <span>100k - 250k</span>
                     </label>
                     <label class="flex items-center space-x-2">
-                        <input type="radio" name="price-filter" value="250000-500000" class="accent-blue-600">
-                        <span>250k-500k</span>
-                    </label>
-                    <label class="flex items-center space-x-2">
-                        <input type="radio" name="price-filter" value="1000000-100000000" class="accent-blue-600">
-                        <span>Trên 1tr</span>
+                        <input type="radio" name="price-filter" value="250000-1000000" class="accent-blue-600">
+                        <span>250k trở lên</span>
                     </label>
                 </div>
             </div>
@@ -124,7 +120,7 @@
         </div>
 
         <!-- Nội dung sản phẩm -->
-        <div class="w-full md:w-3/4">
+        <div class="w-full lg:w-3/4">
             <!-- Container hiển thị tất cả sản phẩm -->
             <div id="all-products-container">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -244,7 +240,7 @@
                     }
 
                     // Tự động đóng sidebar khi chọn danh mục trên mobile
-                    if (window.innerWidth < 768) {
+                    if (window.innerWidth < 1024) {
                         sidebar.classList.add('-translate-x-full');
                         backdrop.classList.add('hidden');
                     }
@@ -306,7 +302,7 @@
                     }, 1);
 
                     // Đóng sidebar trên mobile
-                    if (window.innerWidth < 768) {
+                    if (window.innerWidth < 1024) {
                         sidebar.classList.add('-translate-x-full');
                         backdrop.classList.add('hidden');
                     }

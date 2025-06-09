@@ -34,9 +34,9 @@
                     Sản phẩm</a>
             </li>
             <li>
-                <a href="{{ asset('about') }}"
-                    class="sm:hover:text-gray-900 font-medium min-w-[100px] text-center whitespace-nowrap {{ strpos(url()->current(), 'about') == true ? 'text-blue-500 font-bold' : '' }}">
-                    Giới thiệu</a>
+                <a href="{{ asset('news') }}"
+                    class="sm:hover:text-gray-900 font-medium min-w-[100px] text-center whitespace-nowrap {{ strpos(url()->current(), 'news') == true ? 'text-blue-500 font-bold' : '' }}">
+                    Tin tức</a>
             </li>
             <li>
                 <a href="{{ asset('contact') }}"
@@ -187,8 +187,8 @@ class="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity d
         <a href="/product" class="menu-item {{ request()->is('product') ? 'text-blue-500 font-bold' : '' }}">
             <i class="fa-solid fa-box text-lg"></i> Sản phẩm
         </a>
-        <a href="/about" class="menu-item {{ request()->is('about') ? 'text-blue-500 font-bold' : '' }}">
-            <i class="fa-solid fa-circle-info text-lg"></i> Giới thiệu
+        <a href="/news" class="menu-item {{ request()->is('news') ? 'text-blue-500 font-bold' : '' }}">
+            <i class="fa-solid fa-circle-info text-lg"></i> Tin tức
         </a>
         <a href="/contact" class="menu-item {{ request()->is('contact') ? 'text-blue-500 font-bold' : '' }}">
             <i class="fa-solid fa-address-book text-lg"></i> Liên hệ

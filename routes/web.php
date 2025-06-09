@@ -17,6 +17,8 @@ use App\Http\Controllers\BlogsController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\BannersController;
 use App\Http\Controllers\Auth\CustomForgotPasswordController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 
 Auth::routes();
 
@@ -25,7 +27,7 @@ Route::get('/', function () {
 });
 Route::get('/home', [PagesController::class, 'index'])->name('home');
 
-Route::get('/about', [PagesController::class, 'about'])->name('about');
+Route::get('/news', [PagesController::class, 'news'])->name('news');
 
 Route::get('/product', [PagesController::class, 'show'])->name('product.show');
 
@@ -39,22 +41,22 @@ Route::get('/products/category/{id}', [PagesController::class, 'productsByCatego
 Route::middleware('guest')->group(function () {
 
     // Hiển thị form đăng nhập
-    Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'formLogin'])->name('login');
+    Route::get('/login', [LoginController::class, 'formLogin'])->name('login');
 
     // Hiển thị form đăng nhập
-    Route::get('/loginAdmin', [\App\Http\Controllers\Auth\LoginController::class, 'formLoginAdmin'])->name('loginAdmin');
+    Route::get('/loginAdmin', [LoginController::class, 'formLoginAdmin'])->name('loginAdmin');
 
     // Xử lý đăng nhập (POST)
-    Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login']);
+    Route::post('/login', [LoginController::class, 'login']);
 
     // Xử lý đăng nhập (POST)
-    Route::post('/loginAdmin', [\App\Http\Controllers\Auth\LoginController::class, 'loginAdmin']);
+    Route::post('/loginAdmin', [LoginController::class, 'loginAdmin']);
 
     // Hiển thị form đăng ký
-    Route::get('/register', [PagesController::class, 'register'])->name('register');
+    Route::get('/register', [RegisterController::class, 'register'])->name('register');
 
     // Xử lý đăng ký (POST)
-    Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'register']);
+    Route::post('/register', [RegisterController::class, 'register']);
 
     Route::get('/password/reset', [CustomForgotPasswordController::class, 'showOtpRequestForm'])->name('otp.request');
     Route::post('/password/reset', [CustomForgotPasswordController::class, 'sendOtp'])->name('otp.send');

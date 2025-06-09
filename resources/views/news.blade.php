@@ -69,11 +69,50 @@
                 </div>
             </div>
         </div>
+
+        <div class="w-full relative max-w-6xl px-6 py-6 mx-auto bg-white rounded-xl shadow-md space-y-10 mt-6">
+            <!-- Section 1 -->
+            <div class="flex flex-col md:flex-row items-center gap-6" data-aos="fade-right">
+                <div class="md:w-1/2">
+                    <img class="w-full h-64 object-cover rounded-lg shadow " src="{{ asset('storage/' . $banners[6]->image) }}"
+                        alt="Đèn ngủ LightNight">
+                </div>
+                <div class="md:w-1/2 text-gray-700 text-justify leading-relaxed">
+                    <h2 class="text-2xl font-bold text-indigo-600 mb-2">Giới thiệu về LightNight</h2>
+                    <p>
+                        LightNight chuyên cung cấp các mẫu đèn ngủ thông minh với thiết kế hiện đại, tích hợp nhiều chế độ
+                        ánh sáng dịu nhẹ giúp bạn thư giãn và ngủ ngon hơn. Sản phẩm phù hợp cho mọi không gian như phòng
+                        ngủ, phòng em bé hay làm quà tặng ý nghĩa.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Section 2 -->
+            <div class="flex flex-col md:flex-row-reverse items-center gap-6" data-aos="fade-left">
+                <div class="md:w-1/2">
+                    <img class="w-full h-64 object-cover rounded-lg shadow" src="{{ asset('storage/' . $banners[7]->image) }}"
+                        alt="Đèn ngủ thông minh">
+                </div>
+                <div class="md:w-1/2 text-gray-700 text-justify leading-relaxed">
+                    <h2 class="text-2xl font-bold text-indigo-600 mb-2">Thiết kế tinh tế - Công nghệ hiện đại</h2>
+                    <p>
+                        Mỗi sản phẩm của LightNight được chăm chút từng chi tiết: từ kiểu dáng nhỏ gọn, màu sắc hài hòa đến
+                        chức năng cảm biến và điều khiển từ xa. Chúng tôi mong muốn mang đến không chỉ ánh sáng, mà còn là
+                        sự thư thái và tiện nghi cho ngôi nhà của bạn.
+                    </p>
+                </div>
+            </div>
+
+            <img src="{{ asset('image/capybara.png') }}" alt="Capybara"
+                class="hidden md:block absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[90%] w-32 h-32 object-contain z-20" />
+
+        </div>
+
         <!-- Blog Posts Section -->
         @if($blogs->isNotEmpty())
         <div class="mt-12 text-center" data-aos="fade-up" data-aos-duration="800" data-aos-delay="600">
             <h3 class="text-2xl font-semibold text-gray-800 mb-6">
-                Bài viết Mới
+                Bài viết mới
             </h3>
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($blogs as $blog)
