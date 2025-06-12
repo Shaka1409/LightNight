@@ -1,7 +1,7 @@
 @extends('layout.admin')
 
 @section('content')
-<div class="container mt-5">
+<div class="container">
     <div class="card shadow">
         <div class="card-header bg-warning text-white">
             <h4 class="mb-0">✏️ Chỉnh Sửa Bài Viết</h4>

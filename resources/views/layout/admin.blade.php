@@ -31,67 +31,92 @@
 <body>
 
     <div id="app">
-        <nav class="px-4 fixed-top navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-            <a class="navbar-brand fw-bold" href="{{ route('admin.dashboard') }}">AdminDashboard</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <!-- Sidebar -->
+        <nav class="d-flex flex-column bg-dark text-white p-3 position-fixed vh-100 shadow" style="width: 250px;">
+            <a href="{{ route('admin.dashboard') }}"
+                class="text-white fw-bold fs-5 mb-4 text-decoration-none">AdminDashboard</a>
 
-            <div class=" collapse navbar-collapse" id="navbarContent">
-                <!-- Left -->
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    @php $url = url()->current(); @endphp
-                    <li class="nav-item"><a class="nav-link {{ str_contains($url, 'user') ? 'active' : '' }}"
-                            href="{{ route('user.index') }}">Người dùng</a></li>
-                    <li class="nav-item"><a class="nav-link {{ str_contains($url, 'category') ? 'active' : '' }}"
-                            href="{{ route('category.index') }}">Danh mục</a></li>
-                    <li class="nav-item"><a class="nav-link {{ str_contains($url, 'product') ? 'active' : '' }}"
-                            href="{{ route('product.index') }}">Sản phẩm</a></li>
-                    <li class="nav-item"><a class="nav-link {{ str_contains($url, 'orders') ? 'active' : '' }}"
-                            href="{{ route('admin.orders.index') }}">Đơn hàng</a></li>
-                    <li class="nav-item"><a class="nav-link {{ str_contains($url, 'comments') ? 'active' : '' }}"
-                            href="{{ route('admin.comments.index') }}">Bình luận</a></li>
-                    <li class="nav-item"><a class="nav-link {{ str_contains($url, 'blogs') ? 'active' : '' }}"
-                            href="{{ route('blogs.index') }}">Bài viết</a></li>
-                    <li class="nav-item"><a class="nav-link {{ str_contains($url, 'banners') ? 'active' : '' }}"
-                            href="{{ route('banners.index') }}">Banner</a></li>
-                </ul>
-                <form class="d-flex" action="{{ url()->current() }}" method="GET">
-                    <input name="q" class="form-control me-2" type="search" placeholder="Tìm kiếm..."
-                        aria-label="Search" value="{{ request('q') }}">
-                    <button class="btn btn-outline-success" type="submit">Tìm</button>
-                </form>
+            @php $url = url()->current(); @endphp
 
+            <form class="mb-3" action="{{ url()->current() }}" method="GET">
+                <div class="input-group">
+                    <input name="q" class="form-control form-control-sm" type="search" placeholder="Tìm kiếm..."
+                        value="{{ request('q') }}">
+                    <button class="btn btn-sm btn-outline-success" type="submit">Tìm</button>
+                </div>
+            </form>
 
-                <!-- Right -->
-                <ul class="navbar-nav ms-auto">
-                    @guest
-                        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Đăng nhập</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Đăng ký</a></li>
-                    @else
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-capitalize" href="#" role="button"
-                                data-bs-toggle="dropdown">
-                                Admin: {{ auth()->user()->name }}
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-white {{ str_contains($url, 'user') ? 'active bg-secondary' : '' }}"
+                        href="{{ route('user.index') }}">
+                        Quản lý người dùng
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link text-white {{ str_contains($url, 'category') ? 'active bg-secondary' : '' }}"
+                        href="{{ route('category.index') }}">
+                        Quản lý danh mục
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link text-white {{ str_contains($url, 'product') ? 'active bg-secondary' : '' }}"
+                        href="{{ route('product.index') }}">
+                        Quản lý Sản phẩm
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link text-white {{ str_contains($url, 'orders') ? 'active bg-secondary' : '' }}"
+                        href="{{ route('admin.orders.index') }}">
+                        Quản lý đơn hàng
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link text-white {{ str_contains($url, 'comments') ? 'active bg-secondary' : '' }}"
+                        href="{{ route('admin.comments.index') }}">
+                        Quản lý bình luận
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link text-white {{ str_contains($url, 'blogs') ? 'active bg-secondary' : '' }}"
+                        href="{{ route('blogs.index') }}">
+                        Quản lý bài viết
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link text-white {{ str_contains($url, 'banners') ? 'active bg-secondary' : '' }}"
+                        href="{{ route('banners.index') }}">
+                        Quản lý Banner
+                    </a>
+                </li>
+            </ul>
+
+            <hr class="text-white">
+
+            @guest
+                <a href="{{ route('login') }}" class="nav-link text-white">Đăng nhập</a>
+            @else
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle text-capitalize text-white" href="#" role="button"
+                        data-bs-toggle="dropdown">
+                        Admin: {{ auth()->user()->name }}
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item fw-bold" href="{{ route('logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                Đăng xuất
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                    <a class="dropdown-item fw-bold" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        Đăng xuất
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </li>
-                            </ul>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf
+                            </form>
                         </li>
-                    @endguest
-                </ul>
-            </div>
+                    </ul>
+                </div>
+            @endguest
         </nav>
+
         <!-- Main Content -->
-        <main class="px-4" style="margin-top: 60px;">
+        <main class="px-4" style="margin-left: 250px;">
             @yield('content')
         </main>
     </div>

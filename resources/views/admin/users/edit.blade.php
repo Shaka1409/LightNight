@@ -1,6 +1,6 @@
 @extends('layout.admin')
 @section('content')
-<div class="container mt-5">
+<div class="container">
   <div class="card">
     <div class="card-header">
       <h1>Sửa Người Dùng</h1>

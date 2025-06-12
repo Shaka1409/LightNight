@@ -1,7 +1,7 @@
 @extends('layout.admin')
 
 @section('content')
-    <div class="mt-5">
+    <div class="container">
         <h1 class="mb-4">Quản Lý Sản Phẩm</h1>
         <!-- Bộ lọc theo danh mục -->
         <form method="GET" action="{{ route('product.index') }}" class="mb-3">
@@ -91,18 +91,19 @@
                                 </td>
 
                                 <!-- Hành động -->
-                                <td>
-                                    <a href="{{ route('product.show', $product->id) }}" class="btn btn-info btn-sm">Chi
-                                        tiết</a>
-                                    <a href="{{ route('product.edit', $product->id) }}"
-                                        class="btn btn-warning btn-sm">Sửa</a>
-                                    <form action="{{ route('product.destroy', $product->id) }}" method="POST"
-                                        class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
-                                    </form>
-                                </td>
+<td style="min-width: 200px;">
+    <div class="d-flex flex-wrap gap-1">
+        <a href="{{ route('product.show', $product->id) }}" class="btn btn-info btn-sm">Chi tiết</a>
+        <a href="{{ route('product.edit', $product->id) }}" class="btn btn-warning btn-sm">Sửa</a>
+        <form action="{{ route('product.destroy', $product->id) }}" method="POST"
+            class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+        </form>
+    </div>
+</td>
+
                             </tr>
                         @endforeach
                     </tbody>

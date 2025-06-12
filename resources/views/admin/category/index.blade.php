@@ -1,6 +1,6 @@
 @extends('layout.admin')
 @section('content')
-    <div class="container mt-5">
+    <div class="container">
         <h1 class="mb-4">Quản lý Danh Mục</h1>
         @if (request('q') && $categories->count() === 0)
             <p class="text-danger mb-2 mt-2">Không tìm thấy kết quả cho: "{{ request('q') }}"</p>
@@ -57,8 +57,7 @@
                 </div>
             </div>
         @else
-            <p>Chưa có thể loại đèn ngủ nào. <a class="text-primary" href="{{ route('category.create') }}">Thêm mới thể loại
-                    đèn ngủ?</a></p>
+            <p>Chưa có thể loại đèn ngủ nào. <a class="text-primary" href="{{ route('category.create') }}">Thêm mới thể loại đèn ngủ?</a></p>
         @endif
     </div>
 @endsection

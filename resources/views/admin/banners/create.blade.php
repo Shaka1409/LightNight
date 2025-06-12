@@ -1,7 +1,7 @@
 @extends('layout.admin')
 
 @section('content')
-<div class="container mt-5">
+<div class="container">
     <div class="card shadow">
         <div class="card-header bg-primary text-white">
             <h4 class="mb-0"> Thêm Banner mới</h4>

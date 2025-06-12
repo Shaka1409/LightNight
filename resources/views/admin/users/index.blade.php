@@ -1,6 +1,6 @@
 @extends('layout.admin')
 @section('content')
-    <div class="container mt-5">
+    <div class="container">
         <h1 class="mb-4">Quản lý Người Dùng</h1>
 
         <!-- Bộ lọc theo vai trò -->
