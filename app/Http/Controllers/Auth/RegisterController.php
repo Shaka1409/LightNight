@@ -56,7 +56,7 @@ class RegisterController extends Controller
         ]);
 
         // Gửi email thông báo đăng ký
-        Mail::to($user->email)->send(new RegistrationNotification($user));
+        Mail::to($user->email)->queue(new RegistrationNotification($user));
 
         return $user;
     }

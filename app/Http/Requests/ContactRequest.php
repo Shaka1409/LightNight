@@ -24,9 +24,13 @@ class ContactRequest extends FormRequest
     {
         return [
             'name.required' => 'Vui lòng nhập họ tên.',
+            'name.string' => 'Họ tên phải là chuỗi ký tự.',
+            'name.max' => 'Họ tên không được vượt quá 255 ký tự.',
             'email.required' => 'Vui lòng nhập email.',
             'email.email' => 'Email không hợp lệ.',
             'message.required' => 'Vui lòng nhập nội dung tin nhắn.',
+            'message.string' => 'Nội dung tin nhắn phải là chuỗi ký tự.',
+            'message.max' => 'Nội dung tin nhắn không được vượt quá 1000 ký tự.',
         ];
     }
 }

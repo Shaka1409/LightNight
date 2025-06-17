@@ -31,7 +31,7 @@ class CustomForgotPasswordController extends Controller
             'otp_expires_at' => now()->addMinutes(10)
         ]);
 
-        Mail::to($user->email)->send(new SendOtpMail($otp, $user));
+        Mail::to($user->email)->queue(new SendOtpMail($otp, $user));
         return redirect()->route('otp.verify.form')->with('success', 'OTP đã gửi đến email.');
     }
 

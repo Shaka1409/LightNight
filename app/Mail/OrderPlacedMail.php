@@ -29,12 +29,12 @@ class OrderPlacedMail extends Mailable
     /**
      * Get the message envelope.
      */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Order Placed Mail',
-        );
-    }
+    // public function envelope(): Envelope
+    // {
+    //     return new Envelope(
+    //         subject: 'Xác nhận đơn hàng',
+    //     );
+    // }
 
     /**
      * Get the message content definition.

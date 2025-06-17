@@ -130,10 +130,10 @@ class CheckoutController extends Controller
             DB::commit();
             // Gửi mail xác nhận đơn hàng
             try {
-                Mail::to($order->user->email)->send(new OrderPlacedMail($order));
+                Mail::to($order->user->email)->queue(new OrderPlacedMail($order));
 
                 // Gửi bản báo cáo từ shop về địa chỉ mail từ .env
-                Mail::to(config('mail.from.address'))->send(new OrderReportFromShopMail($order));
+                Mail::to(config('mail.from.address'))->queue(new OrderReportFromShopMail($order));
             } catch (\Exception $e) {
                 Log::error('Lỗi gửi mail: ' . $e->getMessage());
             }

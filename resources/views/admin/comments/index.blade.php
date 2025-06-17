@@ -1,7 +1,23 @@
 @extends('layout.admin')
 @section('content')
     <div class="container">
-        <h1 class="mb-4">Quản lý Bình Luận</h1>
+        
+         <div class="d-flex justify-content-between align-items-center mb-4 mr-4">
+            <h1 class="mb-4">Quản lý Bình Luận</h1>
+
+            <form action="{{ url()->current() }}" method="GET" class="mb-3">
+                <div class="input-group input-group-sm">
+                    <input type="search" name="q"
+                        class="form-control border border-warning rounded-start-pill bg-white shadow-sm"
+                        placeholder="Tìm kiếm..." value="{{ request('q') }}">
+                    <button type="submit" class="btn rounded-end-pill text-white fw-bold px-3"
+                        style="background-color: #fd7e14; box-shadow: 0 4px 12px rgba(253, 126, 20, 0.5);">
+                        <i class="fa fa-search me-1"></i> Tìm
+                    </button>
+                </div>
+            </form>
+
+        </div>
 
         @if (request('q') && $comments->count() === 0)
             <p class="text-danger mb-2 mt-2">Không tìm thấy kết quả cho: "{{ request('q') }}"</p>

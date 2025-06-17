@@ -2,13 +2,30 @@
 
 @section('content')
     <div class="container">
-        <h1 class="mb-4">Quản Lý Sản Phẩm</h1>
-        <!-- Bộ lọc theo danh mục -->
-        <form method="GET" action="{{ route('product.index') }}" class="mb-3">
-            <div class="form-group d-inline-block" style="width: auto;">
-                <label for="category_filter" class="me-2">Lọc theo danh mục:</label>
-                <select name="category" id="category_filter" class="form-control form-control-sm"
-                    style="width: auto; display: inline-block;" onchange="this.form.submit()">
+
+        <div class="d-flex justify-content-between align-items-center mb-4 mr-4">
+            <h1 class="mb-4">Quản Lý Sản Phẩm</h1>
+
+            <form action="{{ url()->current() }}" method="GET" class="mb-3">
+                <div class="input-group input-group-sm">
+                    <input type="search" name="q"
+                        class="form-control border border-warning rounded-start-pill bg-white shadow-sm"
+                        placeholder="Tìm kiếm..." value="{{ request('q') }}">
+                    <button type="submit" class="btn rounded-end-pill text-white fw-bold px-3"
+                        style="background-color: #fd7e14; box-shadow: 0 4px 12px rgba(253, 126, 20, 0.5);">
+                        <i class="fa fa-search me-1"></i> Tìm
+                    </button>
+                </div>
+            </form>
+
+        </div>
+
+        <!-- Bộ lọc theo danh mục và trạng thái -->
+        <form method="GET" action="{{ route('product.index') }}" class="row row-cols-lg-auto g-3 align-items-center mb-3">
+            <div class="col">
+                <label for="category_filter" class="form-label mb-0 me-2">Danh mục:</label>
+                <select name="category" id="category_filter" class="form-select form-select-sm"
+                    onchange="this.form.submit()">
                     <option value="">Tất cả</option>
                     @foreach ($categories as $category)
                         <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
@@ -17,11 +34,23 @@
                     @endforeach
                 </select>
             </div>
+
+            <div class="col">
+                <label for="status_filter" class="form-label mb-0 me-2">Trạng thái:</label>
+                <select name="status" id="status_filter" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="">Tất cả</option>
+                    <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Nổi bật</option>
+                    <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Không nổi bật</option>
+                    <option value="2" {{ request('status') === '2' ? 'selected' : '' }}>Ẩn</option>
+                </select>
+            </div>
         </form>
+
         @if (count($products) === 0 && request('q'))
             <p class="text-danger mb-2 mt-2">Không tìm thấy kết quả cho: "{{ request('q') }}"</p>
         @elseif (count($products) === 0)
-            <p>Chưa có sản phẩm nào. <a class="text-primary" href="{{ route('product.create') }}">Thêm mới sản phẩm?</a></p>
+            <p>Chưa có sản phẩm nào. <a class="text-primary" href="{{ route('product.create') }}">Thêm mới sản phẩm?</a>
+            </p>
         @else
             <a class="btn btn-primary mb-3" href="{{ route('product.create') }}" role="button">Thêm sản phẩm</a>
             <div class="table-responsive">
@@ -91,18 +120,21 @@
                                 </td>
 
                                 <!-- Hành động -->
-<td style="min-width: 200px;">
-    <div class="d-flex flex-wrap gap-1">
-        <a href="{{ route('product.show', $product->id) }}" class="btn btn-info btn-sm">Chi tiết</a>
-        <a href="{{ route('product.edit', $product->id) }}" class="btn btn-warning btn-sm">Sửa</a>
-        <form action="{{ route('product.destroy', $product->id) }}" method="POST"
-            class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
-        </form>
-    </div>
-</td>
+                                <td style="min-width: 200px;">
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <a href="{{ route('product.show', $product->id) }}" class="btn btn-info btn-sm">Chi
+                                            tiết</a>
+                                        <a href="{{ route('product.edit', $product->id) }}"
+                                            class="btn btn-warning btn-sm">Sửa</a>
+                                        <form action="{{ route('product.destroy', $product->id) }}" method="POST"
+                                            class="d-inline"
+                                            onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                                        </form>
+                                    </div>
+                                </td>
 
                             </tr>
                         @endforeach

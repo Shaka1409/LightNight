@@ -99,7 +99,7 @@
                             <label for="phonenumber" class="block font-semibold text-gray-700 mb-1">
                                 Số điện thoại
                             </label>
-                            <input type="text" id="phonenumber" name="phonenumber"
+                            <input type="tel" id="phonenumber" name="phonenumber"
                                 class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300 sm:text-sm"
                                 value="{{ $defaultphonenumber }}" placeholder="Nhập số điện thoại">
                         </div>

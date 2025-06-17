@@ -15,7 +15,7 @@
           {{ __('Email') }}
         </label>
         <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus
-          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 @error('email') border-red-500 @enderror">
+          class="w-full px-4 py-2 border border-grey-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 @error('email') border-red-500 @enderror">
       </div>
 
       <!-- Password -->
@@ -24,7 +24,7 @@
           {{ __('Mât khẩu') }}
         </label>
         <input id="password" type="password" name="password" required autocomplete="current-password"
-          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 @error('password') border-red-500 @enderror">
+          class="w-full px-4 py-2 border border-grey-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 @error('password') border-red-500 @enderror">
       </div>
 
       <!-- Remember Me -->

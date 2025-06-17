@@ -121,7 +121,7 @@ class OrdersController extends Controller
 
     // Gửi email thông báo đến người dùng
     try {
-        Mail::to($order->user->email)->send(
+        Mail::to($order->user->email)->queue(
             new OrderStatusChangedMail($order, $currentStatus, $newStatus)
         );
     } catch (\Exception $e) {

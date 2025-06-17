@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Mail\ContactMail;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\ContactRequest;
 
 class ContactController extends Controller
 {
@@ -14,19 +15,28 @@ class ContactController extends Controller
     {
         return view('contact');
     }
-    public function sendContact(Request $request)
-    {
-        // Validate the request data
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'message' => 'required|string|max:1000',
-        ]);
+    public function sendContact(ContactRequest $request)
+{
+    $now = now();
+    $lastSent = session('last_contact_time');
 
-           // Gửi mail đến admin
-    Mail::to('trinh14092004z@gmail.com')->send(new ContactMail($data));
-
-        // Redirect back with a success message
-        return redirect()->back()->with('success', 'Tin nhắn của bạn được gửi đi thành công!');
+    if ($lastSent && $now->diffInMinutes($lastSent) < 5) {
+        return redirect()->back()->withErrors(['error' => 'Bạn chỉ có thể gửi tin nhắn mỗi 5 phút.']);
     }
+
+    $data = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'message' => 'required|string|max:1000',
+    ]);
+
+    // Gửi mail
+    Mail::to('trinh14092004z@gmail.com')->queue(new ContactMail($data));
+
+    // Ghi lại thời gian gửi
+    session(['last_contact_time' => $now]);
+
+    return redirect()->back()->with('success', 'Tin nhắn của bạn được gửi đi thành công!');
+}
+
 }

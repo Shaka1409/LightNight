@@ -31,12 +31,12 @@ class OrderReportFromShopMail extends Mailable
     /**
      * Get the message envelope.
      */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Order Report From Shop Mail',
-        );
-    }
+    // public function envelope(): Envelope
+    // {
+    //     return new Envelope(
+    //         subject: 'Báo cáo đơn hàng từ cửa hàng',
+    //     );
+    // }
 
     /**
      * Get the message content definition.

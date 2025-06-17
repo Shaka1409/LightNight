@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="h-screen flex items-center justify-center">
-  <div class="w-full max-w-3xl p-8 bg-gradient-to-r from-blue-400/40 to-purple-500/40 rounded-lg shadow-lg">
+  <div class="w-full max-w-md p-8 bg-gradient-to-r from-blue-400/40 to-purple-500/40 rounded-lg shadow-lg">
     <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Đặt lại mật khẩu</h2>
 
   

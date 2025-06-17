@@ -38,7 +38,7 @@ public function build()
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Order Status Changed Mail',
+            subject: 'Cập nhật trạng thái đơn hàng',
         );
     }
 

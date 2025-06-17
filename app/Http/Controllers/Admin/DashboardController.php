@@ -36,6 +36,14 @@ class DashboardController extends Controller
         $totalRevenue = Orders::where('status', 'delivered')
             ->sum('total');
 
+            //lọc ra những sản phẩm có số luowng tồn kho nhỏ hơn 5
+        $lowStockProducts = Product::where('stock_quantity', '<', 5)
+        // ->whereIn('status', [0, 1])
+        //     ->whereHas('category', function ($query) {
+        //         $query->where('status', 1);
+        //     })
+            ->get();
+
         // Tạo mảng mặc định 12 tháng với giá trị 0 cho orders và revenue
         $monthlyStats = collect(range(1, 12))->map(function ($month): array {
             return [
@@ -75,7 +83,7 @@ $statusCounts = Orders::select('status', DB::raw('COUNT(*) as count'))
             'years' => $years,
             'selectedYear' => $selectedYear,
             'statusCounts' => $statusCounts,
-            
+            'lowStockProducts' => $lowStockProducts,
         ]);
     }
 }

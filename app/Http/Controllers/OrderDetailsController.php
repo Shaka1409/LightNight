@@ -56,10 +56,10 @@ class OrderDetailsController extends Controller
 
         // Gửi email thông báo hủy đơn
         try {
-            Mail::to($order->user->email)->send(new OrderCancelledByUserMail($order));
+            Mail::to($order->user->email)->queue(new OrderCancelledByUserMail($order));
 
             // Gửi bản báo cáo từ shop về địa chỉ mail từ .env
-            Mail::to(config('mail.from.address'))->send(new OrderReportCancellForShopMail($order));
+            Mail::to(config('mail.from.address'))->queue(new OrderReportCancellForShopMail($order));
         } catch (\Exception $e) {
             Log::error("Lỗi gửi email hủy đơn hàng bởi user: " . $e->getMessage());
         }

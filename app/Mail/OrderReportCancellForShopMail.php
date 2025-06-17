@@ -35,7 +35,7 @@ class OrderReportCancellForShopMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Order Report Cancell For Shop Mail',
+            subject: 'Báo cáo đơn hàng từ cửa hàng',
         );
     }
 

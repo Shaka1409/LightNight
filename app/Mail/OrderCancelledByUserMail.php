@@ -30,12 +30,12 @@ class OrderCancelledByUserMail extends Mailable
     /**
      * Get the message envelope.
      */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Order Cancelled By User Mail',
-        );
-    }
+    // public function envelope(): Envelope
+    // {
+    //     return new Envelope(
+    //         subject: 'Bạn đã hủy đơn hàng',
+    //     );
+    // }
 
     /**
      * Get the message content definition.
