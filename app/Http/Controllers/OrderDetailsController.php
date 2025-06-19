@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderCancelledByUserMail;
 use Illuminate\Support\Facades\Log;
 use App\Mail\OrderReportCancellForShopMail;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderDetailsController extends Controller
 {
@@ -24,6 +25,14 @@ class OrderDetailsController extends Controller
             ->get();
 
         return view('orders', compact('orders'));
+    }
+
+    public function exportInvoice($id)
+    {
+        $order = Orders::with('details.product')->findOrFail($id);
+
+        return Pdf::loadView('invoice', compact('order'))
+            ->stream("invoice_order_{$order->id}.pdf");
     }
 
     public function cancel(Orders $order)

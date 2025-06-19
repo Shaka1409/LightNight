@@ -103,6 +103,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/my-orders', [OrderDetailsController::class, 'index'])->name('user.orders');
 
+    Route::get('/orders/{id}/invoice', [OrderDetailsController::class, 'exportInvoice'])->name('order.invoice');
+
     Route::put('/order/{order}/cancel', [OrderDetailsController::class, 'cancel'])->name('order.cancel');
 
     Route::delete('/orders/{order}/delete', [OrderDetailsController::class, 'deleteCancelledOrder'])->name('order.delete');
@@ -147,5 +149,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
 
     Route::get('/orders/{id}', [OrdersController::class, 'show'])->name('admin.orders.show');
 
+    Route::put('/orders/{order}/confirm-payment', [OrdersController::class, 'confirmPayment'])->name('admin.orders.confirmPayment');
+
     Route::patch('/orders/{id}/status', [OrdersController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+
+    Route::put('/admin/orders/{id}/shipper', [OrdersController::class, 'updateShipper'])->name('admin.orders.updateShipper');
 });

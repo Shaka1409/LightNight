@@ -43,11 +43,11 @@
                         {{ mb_strtoupper(mb_substr($product->name, 0, 1, 'UTF-8'), 'UTF-8') . mb_substr($product->name, 1, null, 'UTF-8') }}
                     </li>
                     <li class="list-group-item">
-                        <strong>Số lượng tồn kho</strong>
+                        <strong>Số lượng tồn kho:</strong>
                         {{ $product->stock_quantity }}
                     </li>
                     <li class="list-group-item">
-                        <strong>Số sản phẩm đã bán</strong>
+                        <strong>Số sản phẩm đã bán:</strong>
                         {{ $product->sold_count }}
                     </li>
                     <li class="list-group-item">

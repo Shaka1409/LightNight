@@ -64,71 +64,101 @@ class OrdersController extends Controller
 
     // Cập nhật trạng thái đơn hàng từ dropdown
     public function updateStatus(Request $request, $id)
-{
-    $order = Orders::with('user', 'details.product')->findOrFail($id);
+    {
+        $order = Orders::with('user', 'details.product')->findOrFail($id);
 
-    // Validate trạng thái hợp lệ
-    $request->validate([
-        'status' => 'required|in:pending,processing,shipped,delivered,cancelled',
-    ]);
+        // Validate trạng thái hợp lệ
+        $request->validate([
+            'status' => 'required|in:pending,processing,shipped,delivered,cancelled',
+        ]);
 
-    $newStatus = $request->status;
-    $currentStatus = $order->status;
+        $newStatus = $request->status;
+        $currentStatus = $order->status;
 
-    // Trạng thái đã hoàn thành hoặc hủy thì không cho cập nhật
-    if (in_array($currentStatus, ['cancelled', 'delivered'])) {
-        return redirect()->back()->with('error', 'Đơn hàng đã hoàn thành hoặc bị hủy, không thể thay đổi trạng thái.');
-    }
-
-    // Quy tắc chuyển trạng thái hợp lệ
-    $validTransitions = [
-        'pending' => ['processing', 'cancelled'],
-        'processing' => ['shipped', 'cancelled'],
-        'shipped' => ['delivered'],
-    ];
-
-    if (!isset($validTransitions[$currentStatus]) || !in_array($newStatus, $validTransitions[$currentStatus])) {
-        return redirect()->back()->with('error', 'Chuyển trạng thái không hợp lệ.');
-    }
-
-    // Bắt đầu xử lý cập nhật trạng thái
-    DB::transaction(function () use ($order, $newStatus, $currentStatus) {
-
-        // Nếu hủy đơn => hoàn lại hàng
-        if ($newStatus === 'cancelled') {
-            foreach ($order->details as $detail) {
-                $product = $detail->product;
-                if ($product) {
-                    $product->stock_quantity += $detail->quantity;
-                    $product->sold_count = max(0, $product->sold_count - $detail->quantity);
-                    $product->save();
-                }
-            }
+        // Trạng thái đã hoàn thành hoặc hủy thì không cho cập nhật
+        if (in_array($currentStatus, ['cancelled', 'delivered'])) {
+            return redirect()->back()->with('error', 'Đơn hàng đã hoàn thành hoặc bị hủy, không thể thay đổi trạng thái.');
         }
 
-        // Cập nhật trạng thái đơn
-        $order->update(['status' => $newStatus]);
+        // Quy tắc chuyển trạng thái hợp lệ
+        $validTransitions = [
+            'pending' => ['processing', 'cancelled'],
+            'processing' => ['shipped', 'cancelled'],
+            'shipped' => ['delivered'],
+        ];
 
-        // Ghi log lịch sử thay đổi trạng thái
-        OrderStatusHistory::create([
-            'order_id' => $order->id,
-            'old_status' => $currentStatus,
-            'new_status' => $newStatus,
-            'changed_at' => now(),
-            'changed_by' => auth()->id(),
+        if (!isset($validTransitions[$currentStatus]) || !in_array($newStatus, $validTransitions[$currentStatus])) {
+            return redirect()->back()->with('error', 'Chuyển trạng thái không hợp lệ.');
+        }
+
+        // Bắt đầu xử lý cập nhật trạng thái
+        DB::transaction(function () use ($order, $newStatus, $currentStatus) {
+
+            // Nếu hủy đơn => hoàn lại hàng
+            if ($newStatus === 'cancelled') {
+                foreach ($order->details as $detail) {
+                    $product = $detail->product;
+                    if ($product) {
+                        $product->stock_quantity += $detail->quantity;
+                        $product->sold_count = max(0, $product->sold_count - $detail->quantity);
+                        $product->save();
+                    }
+                }
+            }
+
+            // Cập nhật trạng thái đơn
+            $order->update(['status' => $newStatus]);
+
+            // Ghi log lịch sử thay đổi trạng thái
+            OrderStatusHistory::create([
+                'order_id' => $order->id,
+                'old_status' => $currentStatus,
+                'new_status' => $newStatus,
+                'changed_at' => now(),
+                'changed_by' => auth()->id(),
+            ]);
+        });
+
+        // Gửi email thông báo đến người dùng
+        try {
+            Mail::to($order->user->email)->queue(
+                new OrderStatusChangedMail($order, $currentStatus, $newStatus)
+            );
+        } catch (\Exception $e) {
+            // Ghi log nếu cần hoặc hiển thị cảnh báo
+            Log::error("Gửi email thất bại: " . $e->getMessage());
+        }
+
+        if ($newStatus === 'shipped') {
+            return redirect()
+                ->route('admin.orders.show', $order->id)
+                ->with('info', 'Đơn hàng đang được giao. Vui lòng cập nhật thông tin shipper nếu chưa có.');
+        }
+
+        return redirect()->route('admin.orders.index')->with('success', 'Trạng thái đơn hàng đã được cập nhật và email đã được gửi.');
+    }
+    public function updateShipper(Request $request, $id)
+    {
+        $request->validate([
+            'shipper_name' => 'required|string|max:255',
+            'shipper_phone' => 'required|string|max:20',
         ]);
-    });
 
-    // Gửi email thông báo đến người dùng
-    try {
-        Mail::to($order->user->email)->queue(
-            new OrderStatusChangedMail($order, $currentStatus, $newStatus)
-        );
-    } catch (\Exception $e) {
-        // Ghi log nếu cần hoặc hiển thị cảnh báo
-        Log::error("Gửi email thất bại: " . $e->getMessage());
+        $order = Orders::findOrFail($id);
+        $order->update([
+            'shipper_name' => $request->shipper_name,
+            'shipper_phone' => $request->shipper_phone,
+        ]);
+
+        return back()->with('success', 'Cập nhật thông tin shipper thành công.');
     }
 
-    return redirect()->route('admin.orders.index')->with('success', 'Trạng thái đơn hàng đã được cập nhật và email đã được gửi.');
-}
+    public function confirmPayment($id)
+    {
+        $order = Orders::findOrFail($id);
+        $order->is_paid = 1;
+        $order->save();
+
+        return redirect()->back()->with('success', 'Đã xác nhận thanh toán cho đơn hàng #' . $order->id);
+    }
 }

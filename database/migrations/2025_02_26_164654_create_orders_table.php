@@ -13,14 +13,20 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            // Khóa ngoại liên kết với bảng users
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('name'); // Tên người nhận
-            $table->string('address'); // Địa chỉ giao hàng
-            $table->string('phone'); // Số điện thoại
-            $table->decimal('total', 15, 2); // Tổng tiền
-            $table->string('status')->default('pending'); // Trạng thái: pending, processing, shipped, delivered, cancelled
-            $table->timestamps(); // created_at, updated_at
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('name');
+            $table->string('address');
+            $table->string('phone');
+            $table->decimal('total', 15, 2);
+            $table->decimal('shipping_fee', 10, 2)->default(0);
+            $table->string('shipping_area')->default('hanoi');
+            $table->string('payment_method')->default('cod');
+            $table->json('payment_proof')->nullable();
+            $table->boolean('is_paid')->default(false);
+            $table->string('status')->default('pending');
+            $table->string('shipper_name')->nullable();
+            $table->string('shipper_phone', 20)->nullable();
+            $table->timestamps();
         });
     }
 

@@ -37,6 +37,10 @@ class CommentController extends Controller
             });
     }
 
+    if ($request->has('status') && $request->status !== '') {
+        $query->where('status', $request->status);
+    }
+
     $comments = $query->orderBy('created_at', 'desc')->paginate(10);
 
     return view('admin.comments.index', compact('comments'));

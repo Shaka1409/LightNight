@@ -77,84 +77,103 @@ class CheckoutController extends Controller
 
 
     public function confirm(CheckoutRequest $request)
-    {
-        $validated = $request->validated();
-        $checkoutType = session('checkout_type', 'cart');
+{
+    $validated = $request->validated();
+    $checkoutType = session('checkout_type', 'cart');
 
-        $cartItems = ($checkoutType === 'buy_now')
-            ? [session('buy_now_item', [])]
-            : session('cart', []);
+    $cartItems = ($checkoutType === 'buy_now')
+        ? [session('buy_now_item', [])]
+        : session('cart', []);
 
-        if (empty($cartItems)) {
-            return redirect()->route('checkout.view')->with('error', 'Giỏ hàng của bạn trống.');
-        }
-
-        $totalPrice = array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $cartItems));
-
-        DB::beginTransaction();
-        try {
-            $order = Orders::create([
-                'user_id' => Auth::id() ?? null,
-                'name'    => $validated['name'],
-                'address' => $validated['address'],
-                'phone'   => $validated['phonenumber'],
-                'total'   => $totalPrice,
-                'status'  => 'pending',
-            ]);
-
-            foreach ($cartItems as $item) {
-                $product = Product::find($item['id']);
-
-                if ($product && $product->stock_quantity >= $item['quantity']) {
-                    // Trừ tồn kho
-                    $product->stock_quantity -= $item['quantity'];
-
-                    // Cộng số lượng đã bán
-                    $product->sold_count += $item['quantity'];
-
-                    $product->save();
-
-                    // Lưu chi tiết đơn hàng
-                    Order_details::create([
-                        'order_id'   => $order->id,
-                        'product_id' => $product->id,
-                        'quantity'   => $item['quantity'],
-                        'price'      => $item['price'],
-                    ]);
-                } else {
-                    DB::rollBack();
-                    return redirect()->route('checkout.view')->with('error', 'Sản phẩm "' . $product->name . '" không đủ số lượng trong kho.');
-                }
-            }
-
-            DB::commit();
-            // Gửi mail xác nhận đơn hàng
-            try {
-                Mail::to($order->user->email)->queue(new OrderPlacedMail($order));
-
-                // Gửi bản báo cáo từ shop về địa chỉ mail từ .env
-                Mail::to(config('mail.from.address'))->queue(new OrderReportFromShopMail($order));
-            } catch (\Exception $e) {
-                Log::error('Lỗi gửi mail: ' . $e->getMessage());
-            }
-
-
-            if ($checkoutType === 'cart') {
-                session()->forget('cart');
-            }
-
-            session()->forget(['checkout_type', 'buy_now_item']);
-
-            return redirect()->route('checkout.success')->with([
-                'orderId' => $order->id,
-                'total'   => $order->total,
-                'message' => 'Đặt hàng thành công cho đơn hàng #' . $order->id,
-            ]);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->route('checkout.view')->with('error', 'Lỗi khi đặt hàng: ' . $e->getMessage());
-        }
+    if (empty($cartItems)) {
+        return redirect()->route('checkout.view')->with('error', 'Giỏ hàng của bạn trống.');
     }
+
+    $totalProductPrice = array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $cartItems));
+
+    // Phí vận chuyển theo khu vực
+    $shippingFee = match ($request->input('shipping_area')) {
+        'hanoi' => 0,
+        'mienbac' => 30000,
+        'toanquoc' => 50000,
+    };
+
+    $totalPrice = $totalProductPrice + $shippingFee;
+
+    DB::beginTransaction();
+    try {
+        $order = Orders::create([
+            'user_id'         => Auth::id() ?? null,
+            'name'            => $validated['name'],
+            'address'         => $validated['address'],
+            'phone'           => $validated['phonenumber'],
+            'total'           => $totalPrice,
+            'status'          => 'pending',
+            'payment_method' => $validated['payment_method'],
+            'shipping_area'   => $request->input('shipping_area'),
+            'shipping_fee'    => $shippingFee,
+        ]);
+
+        // Lưu ảnh chuyển khoản nếu có
+        if ($request->hasFile('payment_proof')) {
+            $paths = [];
+            foreach ($request->file('payment_proof') as $file) {
+                $paths[] = $file->store('payment_proofs', 'public');
+            }
+            $order->payment_proof = json_encode($paths);
+            $order->save();
+        }
+
+        foreach ($cartItems as $item) {
+            $product = Product::find($item['id']);
+
+            if ($product && $product->stock_quantity >= $item['quantity']) {
+                $product->stock_quantity -= $item['quantity'];
+                $product->sold_count += $item['quantity'];
+                $product->save();
+
+                Order_details::create([
+                    'order_id'   => $order->id,
+                    'product_id' => $product->id,
+                    'quantity'   => $item['quantity'],
+                    'price'      => $item['price'],
+                ]);
+            } else {
+                DB::rollBack();
+                return redirect()->route('checkout.view')
+                    ->with('error', 'Sản phẩm "' . $product->name . '" không đủ số lượng trong kho.');
+            }
+        }
+
+        DB::commit();
+
+        try {
+            if ($order->user) {
+                Mail::to($order->user->email)->queue(new OrderPlacedMail($order));
+            }
+
+            Mail::to(config('mail.from.address'))->queue(new OrderReportFromShopMail($order));
+        } catch (\Exception $e) {
+            Log::error('Lỗi gửi mail: ' . $e->getMessage());
+        }
+
+        if ($checkoutType === 'cart') {
+            session()->forget('cart');
+        }
+
+        session()->forget(['checkout_type', 'buy_now_item']);
+
+        return redirect()->route('checkout.success')->with([
+            'orderId' => $order->id,
+            'total'   => $order->total,
+            'message' => 'Đặt hàng thành công cho đơn hàng #' . $order->id,
+        ]);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return redirect()->route('checkout.view')->with('error', 'Lỗi khi đặt hàng: ' . $e->getMessage());
+    }
+}
+
 
 
 

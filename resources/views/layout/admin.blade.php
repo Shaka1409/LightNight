@@ -182,15 +182,17 @@
     </div>
 
     <!-- Toast Notifications -->
-    @if (session('success') || session('error'))
+    @if (session('success') || session('error') || session('info'))
         <div class="position-fixed top-0 end-0 p-3" style="z-index: 1055">
             <div id="toast-message"
                  class="toast align-items-center text-white 
-                 {{ session('success') ? 'bg-success' : 'bg-danger' }} border-0"
+                 {{ session('success') ? 'bg-success' : (session('error') ? 'bg-danger' : 'bg-info') }}
+                 shadow-lg
+                  border-0"
                  role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body">
-                        {{ session('success') ?? session('error') }}
+                        {{ session('success') ?? session('error') ?? session('info') }}
                     </div>
                     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
                             aria-label="Close"></button>

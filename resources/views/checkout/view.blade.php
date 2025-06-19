@@ -37,7 +37,8 @@
                     </div>
 
                     <!-- Form nhập thông tin -->
-                    <form action="{{ route('checkout.confirm') }}" method="POST" class="bg-white shadow-lg rounded-lg p-6">
+                    <form action="{{ route('checkout.confirm') }}" method="POST" enctype="multipart/form-data"
+                        class="bg-white shadow-lg rounded-lg p-6">
                         @csrf
                         @if (request()->has('product_id') && request()->has('quantity'))
                             <input type="hidden" name="product_id" value="{{ request()->input('product_id') }}">
@@ -84,15 +85,33 @@
                                 value="{{ $defaultName }}" placeholder="Nhập họ tên">
                         </div>
 
-                        <!-- Địa chỉ -->
+                        <!-- Khu vực giao hàng -->
+                        <div class="mb-4">
+                            <label for="shipping_area" class="block font-semibold text-gray-700 mb-1">
+                                Khu vực giao hàng
+                            </label>
+                            <select id="shipping_area" name="shipping_area"
+                                class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300 sm:text-sm"
+                                required>
+                                <option value="hanoi" {{ old('shipping_area') == 'hanoi' ? 'selected' : '' }}>Nội thành Hà
+                                    Nội (Free ship)</option>
+                                <option value="mienbac" {{ old('shipping_area') == 'mienbac' ? 'selected' : '' }}>Các tỉnh
+                                    miền Bắc (30k)</option>
+                                <option value="toanquoc" {{ old('shipping_area') == 'toanquoc' ? 'selected' : '' }}>Toàn
+                                    quốc (50k)</option>
+                            </select>
+                        </div>
+
+                        <!-- Địa chỉ cụ thể -->
                         <div class="mb-4">
                             <label for="address" class="block font-semibold text-gray-700 mb-1">
-                                Địa chỉ
+                                Địa chỉ cụ thể
                             </label>
                             <input type="text" id="address" name="address"
                                 class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300 sm:text-sm"
-                                value="{{ $defaultAddress }}" placeholder="Nhập địa chỉ">
+                                value="{{ $defaultAddress }}" placeholder="Nhập số nhà, đường, phường/xã...">
                         </div>
+
 
                         <!-- Số điện thoại -->
                         <div class="mb-4">
@@ -104,16 +123,36 @@
                                 value="{{ $defaultphonenumber }}" placeholder="Nhập số điện thoại">
                         </div>
 
-                        <!-- Phương thức thanh toán (COD) -->
+                        <!-- Phương thức thanh toán -->
                         <div class="mb-6">
-                            <label class="block font-semibold text-gray-700 mb-1">
-                                Phương thức thanh toán
-                            </label>
-                            <label class="flex items-center">
-                                <input type="radio" name="payment_method" value="cod" class="mr-2" checked>
+                            <label class="block font-semibold text-gray-700 mb-1">Phương thức thanh toán</label>
+                            <label class="flex items-center mb-2">
+                                <input type="radio" name="payment_method" value="cod" class="mr-2" checked
+                                    onchange="toggleBankTransfer(false)">
                                 <span>Thanh toán khi giao hàng (COD)</span>
                             </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="payment_method" value="bank" class="mr-2"
+                                    onchange="toggleBankTransfer(true)">
+                                <span>Chuyển khoản ngân hàng</span>
+                            </label>
                         </div>
+                        <!-- Chuyển khoản ngân hàng -->
+                        <div id="bank-transfer-info" class="hidden mb-6">
+                            <div class="bg-gray-100 p-4 rounded border border-blue-300">
+                                <p class="text-sm mb-2">Quét mã QR hoặc chuyển khoản theo thông tin:</p>
+                                <img src="{{ asset('images/qr-code.png') }}" alt="QR chuyển khoản" class="w-40 h-40 mb-3">
+
+                                <p><strong>Ngân hàng:</strong> MBBank</p>
+                                <p><strong>STK:</strong> 8140920048</p>
+                                <p><strong>Chủ tài khoản:</strong> Nguyễn Thanh Trình</p>
+                                <label for="payment_proof" class="block mt-4 font-semibold text-gray-700 mb-1">Tải ảnh xác
+                                    nhận (1–2 ảnh)</label>
+                                <input type="file" name="payment_proof[]" id="payment_proof" accept="image/*"
+                                    multiple class="w-full border border-gray-300 rounded p-2 sm:text-sm">
+                            </div>
+                        </div>
+
 
                         <div class="text-right">
                             <button type="submit"
@@ -149,17 +188,22 @@
                                     VND</span>
                             </p>
                         </div>
-                        <p class="text-sm text-gray-500 mt-2">Phí vận chuyển: Miễn phí</p>
-                        <p class="text-xl font-bold text-gray-800 mt-2">
-                            Thành tiền: <span class="text-red-500">{{ number_format($totalPrice, 0, ',', '.') }} VND</span>
+                        <p class="text-sm text-gray-500 mt-2">
+                            Phí vận chuyển: <span id="shipping-fee-text">0 VND</span>
                         </p>
-                        @if(session('checkout_type') != 'buy_now')
-                        <a href="{{ route('cart.index') }}">
-                            <button class="mt-4 w-full bg-gray-200 text-gray-700 px-4 py-2 rounded sm:hover:bg-gray-300 sm:text-sm">
-                                Quay về giỏ hàng
-                            </button>
-                        </a>
-                    @endif                    
+                        <p class="text-xl font-bold text-gray-800 mt-2">
+                            Thành tiền: <span class="text-red-500" id="total-with-shipping">
+                                {{ number_format($totalPrice, 0, ',', '.') }} VND
+                            </span>
+                        </p>
+                        @if (session('checkout_type') != 'buy_now')
+                            <a href="{{ route('cart.index') }}">
+                                <button
+                                    class="mt-4 w-full bg-gray-200 text-gray-700 px-4 py-2 rounded sm:hover:bg-gray-300 sm:text-sm">
+                                    Quay về giỏ hàng
+                                </button>
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -169,4 +213,47 @@
             </p>
         @endif
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        const baseTotal = {{ $totalPrice }};
+        const shippingSelect = document.getElementById('shipping_area');
+        const shippingFeeText = document.getElementById('shipping-fee-text');
+        const totalWithShipping = document.getElementById('total-with-shipping');
+
+        function formatCurrency(value) {
+            return value.toLocaleString('vi-VN') + ' VND';
+        }
+
+        function updateShippingFee() {
+            let shippingFee = 0;
+
+            switch (shippingSelect.value) {
+                case 'hanoi':
+                    shippingFee = 0;
+                    break;
+                case 'mienbac':
+                    shippingFee = 30000;
+                    break;
+                case 'toanquoc':
+                    shippingFee = 50000;
+                    break;
+            }
+
+            shippingFeeText.textContent = formatCurrency(shippingFee);
+            totalWithShipping.textContent = formatCurrency(baseTotal + shippingFee);
+        }
+
+        function toggleBankTransfer(show) {
+            const bankTransferInfo = document.getElementById('bank-transfer-info');
+            bankTransferInfo.classList.toggle('hidden', !show);
+        }
+
+        // Gọi khi trang load
+        document.addEventListener('DOMContentLoaded', updateShippingFee);
+
+        // Gọi lại mỗi khi chọn khu vực khác
+        shippingSelect.addEventListener('change', updateShippingFee);
+    </script>
 @endsection
