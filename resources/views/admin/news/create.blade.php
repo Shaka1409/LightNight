@@ -4,7 +4,7 @@
 <div class="container">
     <div class="card shadow">
         <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">📝 Thêm Bài Viết Mới</h4>
+            <h4 class="mb-0">📝 Thêm Tin Tức Mới</h4>
         </div>
         <div class="card-body">
             @if ($errors->any())
@@ -17,12 +17,12 @@
                 </div>
             @endif
 
-            <form action="{{ route('blogs.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('news.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <!-- Tên bài viết -->
+                <!-- Tên tin tức -->
                 <div class="mb-3">
-                    <label for="name" class="form-label">Tên bài viết *</label>
+                    <label for="name" class="form-label">Tên tin tức *</label>
                     <input type="text" id="name" name="name" required value="{{ old('name') }}"
                            class="form-control @error('name') is-invalid @enderror">
                     @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
@@ -30,7 +30,7 @@
 
                 <!-- Link -->
                 <div class="mb-3">
-                    <label for="link" class="form-label">Link bài viết</label>
+                    <label for="link" class="form-label">Link tin tức</label>
                     <input type="url" id="link" name="link" value="{{ old('link') }}"
                            class="form-control @error('link') is-invalid @enderror">
                     @error('link') <div class="invalid-feedback">{{ $message }}</div> @enderror
@@ -38,7 +38,7 @@
 
                 <!-- Ảnh -->
                 <div class="mb-3">
-                    <label for="image" class="form-label">Ảnh bài viết *</label>
+                    <label for="image" class="form-label">Ảnh tin tức *</label>
                     <input type="file" id="image" name="image" required accept="image/*"
                            class="form-control @error('image') is-invalid @enderror" onchange="previewImage(event)">
                     <div class="mt-3">
@@ -76,7 +76,7 @@
                 <!-- Nút lưu -->
                 <div class="d-flex justify-content-between">
                     <a href="{{ url()->previous() }}" class="btn btn-secondary">Quay lại</a>
-                    <button type="submit" class="btn btn-success">Lưu bài viết</button>
+                    <button type="submit" class="btn btn-success">Lưu tin tức</button>
                 </div>
             </form>
         </div>

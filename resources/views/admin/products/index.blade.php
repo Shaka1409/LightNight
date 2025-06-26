@@ -38,7 +38,8 @@
             <div class="col">
                 <label for="status_filter" class="form-label mb-0 me-2">Trạng thái:</label>
                 <select name="status" id="status_filter" class="form-select form-select-sm" onchange="this.form.submit()">
-                    <option value="">Tất cả</option>
+                    <option value="" {{ request('status') === null || request('status') === '' ? 'selected' : '' }}>
+                        Tất cả</option>
                     <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Nổi bật</option>
                     <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Không nổi bật</option>
                     <option value="2" {{ request('status') === '2' ? 'selected' : '' }}>Ẩn</option>

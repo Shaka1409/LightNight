@@ -58,6 +58,9 @@
                         <p><strong>Người đặt:</strong> {{ $order->name }}</p>
                         <p><strong>SĐT:</strong> {{ $order->phone }}</p>
                         <p><strong>Địa chỉ:</strong> {{ $order->address }}</p>
+                        <p><strong><i class="fas fa-money-bill-wave"></i> Thanh toán:</strong>
+                            {{ $order->payment_method == 'cod' ? 'Thanh toán khi nhận hàng (COD)' : 'Chuyển khoản ngân hàng' }}
+                        </p>
 
                         @if ($order->shipper_name && $order->shipper_phone)
                             <p><strong>Shipper:</strong> {{ $order->shipper_name }}</p>
@@ -107,10 +110,11 @@
                             </div>
                         @endif
                         {{-- Nút xuất hóa đơn --}}
-    <a href="{{ route('order.invoice', $order->id) }}"
-       class="bg-green-500 text-white px-3 py-1 rounded shadow hover:bg-green-600 transition text-sm">
-        Xuất hóa đơn
-    </a>
+                        <a href="{{ route('order.invoice', $order->id) }}" target="_blank"
+                            class="bg-green-500 text-white px-3 py-1 rounded shadow hover:bg-green-600 transition text-sm">
+                            <i class="fas fa-file-invoice"></i>
+                            Xuất hóa đơn
+                        </a>
                     </div>
 
 

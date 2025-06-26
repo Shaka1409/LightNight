@@ -222,13 +222,13 @@
                 </div>
             </div>
         </div>
-        <!-- Blog Posts Section -->
-        @if (count($blogs) > 0)
+        <!-- new Posts Section -->
+        @if (count($news) > 0)
             <div class="mx-auto px-4 py-4" data-aos="fade-up" data-aos-duration="400">
-                <h2 class="text-xl md:text-2xl font-bold text-center text-blue-500 mb-8 mt-8">Bài viết nổi bật</h2>
+                <h2 class="text-xl md:text-2xl font-bold text-center text-blue-500 mb-8 mt-8">Tin tức nổi bật</h2>
                 <div class="grid text-center sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    @foreach ($blogs as $blog)
-                        <x-blog-card :blog="$blog" />
+                    @foreach ($news as $new)
+                        <x-new-card :new="$new" />
                     @endforeach
                 </div>
             </div>

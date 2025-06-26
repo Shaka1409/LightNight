@@ -3,11 +3,13 @@
 
 Đơn hàng mới **#{{ $order->id }}** đã được đặt.
 
-**Thông tin khách hàng:**
-- Họ tên: {{ $order->name }}
+**Thông tin đơn hàng:**
+- Người đặt: {{ $order->user->name }}
+- Người nhận: {{ $order->name }}
 - Email: {{ $order->user->email ?? 'N/A' }}
 - SĐT: {{ $order->phone }}
 - Địa chỉ: {{ $order->address }}
+- Phương thức thanh toán: {{ $order->payment_method == 'cod' ? 'Thanh toán khi nhận hàng (COD)' : 'Chuyển khoản ngân hàng' }}  
 
 **Tổng tiền:** {{ number_format($order->total, 0, ',', '.') }}₫  
 **Thời gian:** {{ $order->created_at->format('d/m/Y H:i') }}

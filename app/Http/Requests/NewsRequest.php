@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BlogRequest extends FormRequest
+class NewsRequest extends FormRequest
 {
     /**
      * Xác thực người dùng có quyền gửi request này không.
@@ -35,16 +35,16 @@ class BlogRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required'        => 'Tên bài viết không được để trống.',
-            'name.string'          => 'Tên bài viết phải là chuỗi ký tự.',
-            'name.max'             => 'Tên bài viết không được vượt quá 255 ký tự.',
+            'name.required'        => 'Tên tin tức không được để trống.',
+            'name.string'          => 'Tên tin tức phải là chuỗi ký tự.',
+            'name.max'             => 'Tên tin tức không được vượt quá 255 ký tự.',
 
             'link.url'             => 'Đường dẫn không hợp lệ.',
 
             'image.sometimes'      => 'Bạn có thể chọn hình ảnh.',
             'image.image'          => 'Tệp tải lên phải là hình ảnh hợp lệ.',
 
-            'content.required'     => 'Nội dung bài viết không được để trống.',
+            'content.required'     => 'Nội dung tin tức không được để trống.',
 
             'description.required' => 'Mô tả không được để trống.',
             'description.string'   => 'Mô tả phải là một chuỗi ký tự.',

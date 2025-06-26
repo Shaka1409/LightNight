@@ -108,20 +108,20 @@
 
         </div>
 
-        <!-- Blog Posts Section -->
-        @if($blogs->isNotEmpty())
+        <!-- new Posts Section -->
+        @if($news->isNotEmpty())
         <div class="mt-12 text-center" data-aos="fade-up" data-aos-duration="800" data-aos-delay="600">
             <h3 class="text-2xl font-semibold text-gray-800 mb-6">
-                Bài viết mới
+                Tin tức mới
             </h3>
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach($blogs as $blog)
-                   <x-blog-card :blog="$blog"/>
+                @foreach($news as $new)
+                   <x-new-card :new="$new"/>
                 @endforeach
             </div>
         </div>
         @endif
-        <!-- End Blog Posts Section -->
+        <!-- End new Posts Section -->
         <div class="mt-12 text-center">
             <h3 class="text-2xl font-semibold text-gray-800 mb-6">
                 Liên hệ với chúng tôi

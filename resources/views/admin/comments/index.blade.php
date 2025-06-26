@@ -18,22 +18,20 @@
             </form>
 
         </div>
- <form method="GET" action="{{ route('admin.comments.index') }}" class="row row-cols-lg-auto g-3 align-items-center mb-3">
-        <div class="col">
-            <label for="status_filter" class="form-label mb-0 me-2">Trạng thái:</label>
-            <select name="status" id="status_filter" class="form-select form-select-sm" onchange="this.form.submit()">
-                <option value="">Tất cả</option>
-                <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Ẩn
-                </option>
-                <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Chờ kiểm duyệt
-                </option>
-                <option value="2" {{ request('status') === '2' ? 'selected' : '' }}>Hiển thị
-                </option>
-                <option value="3" {{ request('status') === '3' ? 'selected' : '' }}>Nổi bật
-                </option>
-            </select>
-        </div>
-    </form>
+        <form method="GET" action="{{ route('admin.comments.index') }}"
+            class="row row-cols-lg-auto g-3 align-items-center mb-3">
+            <div class="col">
+                <label for="status_filter" class="form-label mb-0 me-2">Trạng thái:</label>
+                <select name="status" id="status_filter" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="" {{ request('status') === null || request('status') === '' ? 'selected' : '' }}>
+                        Tất cả</option>
+                    <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Ẩn</option>
+                    <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Chờ kiểm duyệt</option>
+                    <option value="2" {{ request('status') === '2' ? 'selected' : '' }}>Hiển thị</option>
+                    <option value="3" {{ request('status') === '3' ? 'selected' : '' }}>Nổi bật</option>
+                </select>
+            </div>
+        </form>
 
         @if (request('q') && $comments->count() === 0)
             <p class="text-danger mb-2 mt-2">Không tìm thấy kết quả cho: "{{ request('q') }}"</p>

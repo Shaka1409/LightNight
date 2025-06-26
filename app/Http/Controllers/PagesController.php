@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Comment;
-use App\Models\Blogs;
+use App\Models\News;
 use App\Models\Banners;
 use App\Models\ProductImage;
 
@@ -27,11 +27,11 @@ class PagesController extends Controller
         }])
             ->where('status', [1])
             ->get();
-        // Lấy tất cả bài viết blog, sắp xếp theo thời gian tạo giảm dần
-        $blogs = Blogs::where('status', '=', 1)->get();
+        // Lấy tất cả bài viết New, sắp xếp theo thời gian tạo giảm dần
+        $news = News::where('status', '=', 1)->get();
         $outstandingComments = Comment::where('status', '=', 3)->get();
         $banners = Banners::whereIn('position', [1, 2, 3, 4, 5, 6, 7])->get()->keyBy('position');
-        return view('home', compact('categories', 'products', 'blogs', 'outstandingComments', 'banners'));
+        return view('home', compact('categories', 'products', 'news', 'outstandingComments', 'banners'));
     }
 
     public function show()
@@ -125,31 +125,31 @@ class PagesController extends Controller
 
     public function news()
     {
-        // Lấy tất cả bài viết blog, sắp xếp theo thời gian tạo giảm dần
-        $blogs = Blogs::orderBy('created_at', 'desc')->get();
+        // Lấy tất cả bài viết new, sắp xếp theo thời gian tạo giảm dần
+        $news = News::orderBy('created_at', 'desc')->get();
         $banners = Banners::whereIn('position', [6, 7, 8])->get()->keyBy('position');
-        // Trả về view about.blade.php và truyền biến $blogs sang
-        return view('news', compact('blogs', 'banners'));
+        // Trả về view about.blade.php và truyền biến $News sang
+        return view('news', compact('news', 'banners'));
     }
 
-    public function blog($id)
+    public function new($id)
     {
-        // Lấy blog hiện tại theo ID
-        $blog = Blogs::findOrFail($id);
+        // Lấy new hiện tại theo ID
+        $new = News::findOrFail($id);
 
         // Lấy 2 bài viết trước (ID nhỏ hơn)
-        $previousBlogs = Blogs::where('id', '<', $id)
+        $previousNews = News::where('id', '<', $id)
             ->orderBy('id', 'desc') // Lấy bài viết gần nhất trước đó
             ->take(2)
             ->get();
 
         // Lấy 2 bài viết sau (ID lớn hơn)
-        $nextBlogs = Blogs::where('id', '>', $id)
+        $nextNews = News::where('id', '>', $id)
             ->orderBy('id', 'asc')
             ->take(2)
             ->get();
 
-        // Trả về view và truyền cả blog, previousBlogs và nextBlogs vào
-        return view('blog', compact('blog', 'previousBlogs', 'nextBlogs'));
+        // Trả về view và truyền cả New, previousNews và nextNews vào
+        return view('new', compact('new', 'previousNews', 'nextNews'));
     }
 }

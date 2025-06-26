@@ -13,7 +13,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\OrderDetailsController;
-use App\Http\Controllers\BlogsController;
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\BannersController;
 use App\Http\Controllers\Auth\CustomForgotPasswordController;
@@ -68,7 +68,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/password/new', [CustomForgotPasswordController::class, 'resetPassword'])->name('otp.reset');
 });
 
-Route::get('/blog/{id}', [PagesController::class, 'blog'])->name('blog');
+Route::get('/new/{id}', [PagesController::class, 'new'])->name('new');
 
 Route::get('/contact', [ContactController::class, 'contact'])->name('contact');
 
@@ -134,8 +134,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     // Resource cho Product
     Route::resource('/products', ProductController::class)->names('product');
 
-    // Resource cho Blogs (thêm, sửa, xoá blogs)
-    Route::resource('/blogs', BlogsController::class)->names('blogs');
+    // Resource cho news (thêm, sửa, xoá news)
+    Route::resource('/news', NewsController::class)->names('news');
 
     // Danh sách bình luận
     Route::get('/comments', [CommentController::class, 'index'])->name('admin.comments.index');

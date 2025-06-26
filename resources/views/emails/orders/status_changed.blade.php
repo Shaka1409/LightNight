@@ -16,6 +16,10 @@ Trạng thái đơn hàng **#{{ $order->id }}** của bạn đã được cập 
 - **Trạng thái cũ:** {{ $statusVN[$oldStatus] ?? $oldStatus }}
 - **Trạng thái mới:** {{ $statusVN[$newStatus] ?? $newStatus }}
 
+@if ($order->shipper_name)
+- Shipper: {{ $order->shipper_name }} - {{ $order->shipper_phone }}
+@endif
+
 Cảm ơn bạn đã mua sắm tại {{ config('app.name') }}!
 
 Trân trọng,<br>

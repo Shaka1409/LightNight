@@ -1,15 +1,6 @@
-@php
-$statusVN = [
-    'pending' => 'Chờ xử lý',
-    'processing' => 'Đang xử lý',
-    'shipped' => 'Đã giao hàng',
-    'delivered' => 'Đã nhận hàng',
-    'cancelled' => 'Đã hủy',
-];
-@endphp
 
 @component('mail::message')
-# Xin chào {{ $order->name }},
+# Xin chào {{ $order->user->name }},
 
 Cảm ơn bạn đã đặt hàng tại {{ config('app.name') }}.  
 Chúng tôi đã nhận được đơn hàng **#{{ $order->id }}** của bạn.
@@ -19,8 +10,9 @@ Chúng tôi đã nhận được đơn hàng **#{{ $order->id }}** của bạn.
 - Tên người nhận: {{ $order->name }}
 - SĐT: {{ $order->phone }}
 - Địa chỉ: {{ $order->address }}
+- Phương thức thanh toán: {{ $order->payment_method == 'cod' ? 'Thanh toán khi nhận hàng (COD)' : 'Chuyển khoản ngân hàng' }}
 - Tổng tiền: {{ number_format($order->total, 0, ',', '.') }}₫
-- Trạng thái: {{ $statusVN[$order->status] ?? $order->status }}
+
 - Ngày đặt hàng: {{ $order->created_at->format('d/m/Y H:i') }}
 
 

@@ -11,6 +11,7 @@
                     </div>
                     <div class="card-body">
                         <p><strong><i class="fas fa-user"></i> Người đặt:</strong> {{ $order->user->name }}</p>
+                        <p><strong><i class="fas fa-user"></i> Người nhận:</strong> {{ $order->name }}</p>
                         <p><strong><i class="fas fa-map-marker-alt"></i> Địa chỉ:</strong> {{ $order->address }}</p>
                         <p><strong><i class="fas fa-phone"></i> Số điện thoại:</strong> {{ $order->phone }}</p>
                         <p><strong><i class="fas fa-shipping-fast"></i> Khu vực giao hàng:</strong>
@@ -45,7 +46,7 @@
                                 </div>
                             @endforeach
                             <form action="{{ route('admin.orders.confirmPayment', $order->id) }}" method="POST"
-                                class="mt-3">
+                                onsubmit="return confirm('Bạn có chắc đơn hàng đã được thanh toán?')" class="mt-3">
                                 @csrf
                                 @method('PUT')
                                 <button type="submit" class="btn btn-success">✅ Xác nhận đã thanh toán</button>
@@ -161,6 +162,11 @@
                         </div>
                     </div>
                 </div>
+            <a href="{{ route('order.invoice', $order->id) }}" target="_blank"
+                class="btn btn-success mt-3">
+            <i class="fas fa-file-invoice"></i>
+                Xuất hóa đơn
+            </a>
             </div>
         </div>
     </div>

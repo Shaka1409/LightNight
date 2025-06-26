@@ -39,7 +39,7 @@
                     <tbody class="divide-y divide-gray-200">
                         @foreach ($orders as $order)
                             <tr>
-                                <td class="py-3 px-4">{{ $order->id }}</td>
+                                <td class="py-3 px-4">#{{ $order->id }}</td>
                                 <td class="py-3 px-4">{{ number_format($order->total, 0, ',', '.') }} VNĐ</td>
                                 <td class="py-3 px-4">{{ $order->created_at->format('d/m/Y') }}</td>
                                 <td class="py-3 px-4">

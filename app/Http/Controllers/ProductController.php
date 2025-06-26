@@ -31,9 +31,10 @@ class ProductController extends Controller
             $query->where('name', 'like', '%' . $request->q . '%');
         }
 
-        if ($request->has('status') && $request->status !== '') {
+        if ($request->filled('status') || $request->status === '0') {
             $query->where('status', $request->status);
         }
+
 
         $products = $query->orderBy('id', 'desc')->paginate(10);
         $categories = Category::all();

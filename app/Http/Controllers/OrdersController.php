@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderStatusChangedMail;
-use App\Models\OrderStatusHistory;
+use App\Mail\confirmPayment;
 use Illuminate\Support\Facades\Log;
 
 
@@ -109,14 +109,6 @@ class OrdersController extends Controller
             // Cập nhật trạng thái đơn
             $order->update(['status' => $newStatus]);
 
-            // Ghi log lịch sử thay đổi trạng thái
-            OrderStatusHistory::create([
-                'order_id' => $order->id,
-                'old_status' => $currentStatus,
-                'new_status' => $newStatus,
-                'changed_at' => now(),
-                'changed_by' => auth()->id(),
-            ]);
         });
 
         // Gửi email thông báo đến người dùng
@@ -154,11 +146,32 @@ class OrdersController extends Controller
     }
 
     public function confirmPayment($id)
-    {
-        $order = Orders::findOrFail($id);
-        $order->is_paid = 1;
-        $order->save();
+{
+    $order = Orders::findOrFail($id);
 
-        return redirect()->back()->with('success', 'Đã xác nhận thanh toán cho đơn hàng #' . $order->id);
+    if ($order->is_paid) {
+        return back()->with('error', 'Đơn hàng đã được xác nhận thanh toán.');
     }
+
+    $order->is_paid = 1;
+
+    // Cập nhật trạng thái nếu cần
+    // if ($order->status !== 'delivered') {
+    //     $order->status = 'delivered';
+    // }
+
+    $order->save();
+
+    // Gửi email thông báo đến người dùng
+    try {
+        Mail::to($order->user->email)->queue(
+            new ConfirmPayment($order) // Tên class viết hoa đúng chuẩn
+        );
+    } catch (\Exception $e) {
+        Log::error("Gửi email thất bại: " . $e->getMessage());
+    }
+
+    return back()->with('success', 'Đã xác nhận thanh toán cho đơn hàng #' . $order->id);
+}
+
 }

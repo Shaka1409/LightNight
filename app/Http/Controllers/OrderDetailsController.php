@@ -30,7 +30,13 @@ class OrderDetailsController extends Controller
     public function exportInvoice($id)
     {
         $order = Orders::with('details.product')->findOrFail($id);
-
+   // Nếu người dùng KHÔNG phải admin
+    if (!auth()->user()->is_admin) {
+        // Và đơn hàng KHÔNG thuộc về họ thì chặn
+        if ($order->user_id !== auth()->id()) {
+            abort(403, 'Bạn không có quyền truy cập hoá đơn này.');
+        }
+    }
         return Pdf::loadView('invoice', compact('order'))
             ->stream("invoice_order_{$order->id}.pdf");
     }

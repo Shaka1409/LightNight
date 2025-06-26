@@ -131,10 +131,10 @@
                     </a>
                 </li>
                 <li>
-                    <a class="nav-link text-white {{ str_contains($url, 'blogs') ? 'active' : '' }}"
-                       href="{{ route('blogs.index') }}">
+                    <a class="nav-link text-white {{ str_contains($url, 'news') ? 'active' : '' }}"
+                       href="{{ route('news.index') }}">
                         <i class="fa-solid fa-newspaper"></i>
-                        <span class="sidebar-label">Quản lý bài viết</span>
+                        <span class="sidebar-label">Quản lý tin tức</span>
                     </a>
                 </li>
                 <li>
