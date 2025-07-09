@@ -44,6 +44,16 @@
                     Liên hệ
                 </a>
             </li>
+            @auth
+                @if(auth()->user()->role == 'admin')
+                    <li>
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="sm:hover:text-gray-900 font-medium min-w-[100px] text-center whitespace-nowrap {{ strpos(url()->current(), 'admin') == true ? 'text-blue-500 font-bold' : '' }}">
+                            Quản trị
+                        </a>
+                    </li>
+                @endif
+            @endauth
         </ul>
 
         <!-- Search Form -->
@@ -196,6 +206,13 @@ class="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity d
         <a href="/cart" class="cart-link menu-item {{ request()->is('cart') ? 'text-blue-500 font-bold' : '' }}">
             <i class="fa-solid fa-shopping-cart text-lg"></i> Giỏ hàng
         </a>
+        @auth
+            @if(auth()->user()->role == 'admin')
+                <a href="{{ route('admin.dashboard') }}" class="menu-item {{ request()->is('admin') ? 'text-blue-500 font-bold' : '' }}">
+                    <i class="fa-solid fa-user-shield text-lg"></i> Quản trị
+                </a>
+            @endif
+        @endauth
         </div>
     </div>
 

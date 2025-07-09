@@ -1,79 +1,97 @@
 @extends('layout.admin')
 @section('content')
-    <div class="container">
-        
-         <div class="d-flex justify-content-between align-items-center mb-4 mr-4">
-            <h1 class="mb-4">Quản lý Danh Mục</h1>
+    <div class="container mx-auto px-4 py-8 bg-light min-vh-100">
+        <div class="card shadow-lg p-4 mb-5 rounded-3">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 fw-bold text-dark">Quản lý Danh Mục</h1>
 
-            <form action="{{ url()->current() }}" method="GET" class="mb-3">
-                <div class="input-group input-group-sm">
-                    <input type="search" name="q"
-                        class="form-control border border-warning rounded-start-pill bg-white shadow-sm"
-                        placeholder="Tìm kiếm..." value="{{ request('q') }}">
-                    <button type="submit" class="btn rounded-end-pill text-white fw-bold px-3"
-                        style="background-color: #fd7e14; box-shadow: 0 4px 12px rgba(253, 126, 20, 0.5);">
-                        <i class="fa fa-search me-1"></i> Tìm
-                    </button>
-                </div>
-            </form>
-
-        </div>
-        @if (request('q') && $categories->count() === 0)
-            <p class="text-danger mb-2 mt-2">Không tìm thấy kết quả cho: "{{ request('q') }}"</p>
-        @elseif (count($categories) > 0)
-            <a class="btn btn-primary mb-3" href="{{ route('category.create') }}" role="button">Thêm danh mục</a>
-            @if (request('q') && $categories->count() > 0)
-                <p class="text-muted mb-2 mt-2">Kết quả tìm kiếm cho: "{{ request('q') }}"</p>
-            @endif
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Tên danh mục</th>
-                            <th scope="col">Trạng thái</th>
-                            <th scope="col">Mô tả</th>
-                            <th scope="col">Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($categories as $key => $category)
-                            <tr>
-                                <th scope="row">{{ $categories->firstItem() + $key }}</th>
-                                <td>
-                                    {{ mb_strtoupper(mb_substr($category->name, 0, 1, encoding: 'UTF-8'), 'UTF-8') . mb_substr($category->name, 1, null, 'UTF-8') }}
-                                </td>
-                                <td>
-                                    @if ($category->status == 1)
-                                        <span class="text-success">Hiển thị</span>
-                                    @else
-                                        <span class="text-danger">Ẩn</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    {{ mb_strtoupper(mb_substr($category->description, 0, 1, 'UTF-8'), 'UTF-8') . mb_substr($category->description, 1, null, 'UTF-8') }}
-                                </td>
-                                <td>
-                                    <a href="{{ route('category.edit', $category->id) }}"
-                                        class="btn btn-warning btn-sm">Sửa</a>
-                                    <form action="{{ route('category.destroy', $category->id) }}" method="POST"
-                                        class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa thể loại này?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <!-- Hiển thị các nút phân trang -->
-                <div class="d-flex justify-content-center">
-                    {{ $categories->links('pagination::bootstrap-5') }}
-                </div>
+                <div class="col-auto">
+                <form action="{{ url()->current() }}" method="GET">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border border-end-0 border-gray-300">
+                            <i class="fa fa-search text-gray-500"></i>
+                        </span>
+                        <input type="search" name="q"
+                            class="form-control border border-start-0 border-gray-300 bg-white shadow-sm"
+                            placeholder="Tìm kiếm danh mục..." value="{{ request('q') }}">
+                        <button type="submit"
+                            class="btn btn-primary shadow-sm">
+                            Tìm
+                        </button>
+                    </div>
+                </form>
             </div>
-        @else
-            <p>Chưa có thể loại đèn ngủ nào. <a class="text-primary" href="{{ route('category.create') }}">Thêm mới thể loại đèn ngủ?</a></p>
-        @endif
+            </div>
+
+            @if (request('q') && $categories->count() === 0)
+                <div class="alert alert-danger rounded-3 mb-4" role="alert">
+                    Không tìm thấy kết quả cho: "{{ request('q') }}"
+                </div>
+            @elseif (count($categories) > 0)
+                <a class="btn btn-primary mb-4 rounded-3 fw-semibold shadow-sm w-25"
+                    href="{{ route('category.create') }}" role="button">Thêm danh mục</a>
+                @if (request('q') && $categories->count() > 0)
+                    <div class="card-header bg-light text-muted">
+                        Kết quả tìm kiếm cho: "{{ request('q') }}"
+                    </div>
+                @endif
+                <div class="card shadow-lg rounded-3 overflow-hidden">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col" class="px-4 py-3 fw-semibold">#</th>
+                                    <th scope="col" class="px-4 py-3 fw-semibold">Tên danh mục</th>
+                                    <th scope="col" class="px-4 py-3 fw-semibold">Trạng thái</th>
+                                    <th scope="col" class="px-4 py-3 fw-semibold">Mô tả</th>
+                                    <th scope="col" class="px-4 py-3 fw-semibold">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($categories as $key => $category)
+                                    <tr>
+                                        <th scope="row" class="px-4 py-3">{{ $categories->firstItem() + $key }}</th>
+                                        <td class="px-4 py-3">
+                                            {{ mb_strtoupper(mb_substr($category->name, 0, 1, encoding: 'UTF-8'), 'UTF-8') . mb_substr($category->name, 1, null, 'UTF-8') }}
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            @if ($category->status == 1)
+                                                <span class="text-success">Hiển thị</span>
+                                            @else
+                                                <span class="text-danger">Ẩn</span>
+                                            @endif
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            {{ mb_strtoupper(mb_substr($category->description, 0, 1, 'UTF-8'), 'UTF-8') . mb_substr($category->description, 1, null, 'UTF-8') }}
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            <a href="{{ route('category.edit', $category->id) }}"
+                                                class="btn btn-warning btn-sm rounded-3 shadow-sm">Sửa</a>
+                                            <form action="{{ route('category.destroy', $category->id) }}" method="POST"
+                                                class="d-inline"
+                                                onsubmit="return confirm('Bạn có chắc muốn xóa thể loại này?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="btn btn-danger btn-sm rounded-3 shadow-sm">Xóa</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Hiển thị các nút phân trang -->
+                    <div class="card-footer bg-light d-flex justify-content-center">
+                        {{ $categories->links('pagination::bootstrap-5') }}
+                    </div>
+                </div>
+            @else
+                <div class="alert alert-info rounded-3 mb-4" role="alert">
+                    Chưa có thể loại đèn ngủ nào. 
+                    <a class="text-primary text-decoration-underline" href="{{ route('category.create') }}">Thêm mới thể loại đèn ngủ?</a>
+                </div>
+            @endif
+        </div>
     </div>
 @endsection

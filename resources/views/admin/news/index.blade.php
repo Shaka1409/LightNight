@@ -5,17 +5,22 @@
         <div class="d-flex justify-content-between align-items-center mb-4 mr-4">
             <h1 class="mb-4">Quản lý Tin Tức</h1>
 
-            <form action="{{ url()->current() }}" method="GET" class="mb-3">
-                <div class="input-group input-group-sm">
-                    <input type="search" name="q"
-                        class="form-control border border-warning rounded-start-pill bg-white shadow-sm"
-                        placeholder="Tìm kiếm..." value="{{ request('q') }}">
-                    <button type="submit" class="btn rounded-end-pill text-white fw-bold px-3"
-                        style="background-color: #fd7e14; box-shadow: 0 4px 12px rgba(253, 126, 20, 0.5);">
-                        <i class="fa fa-search me-1"></i> Tìm
-                    </button>
-                </div>
-            </form>
+            <div class="col-auto">
+                <form action="{{ url()->current() }}" method="GET">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border border-end-0 border-gray-300">
+                            <i class="fa fa-search text-gray-500"></i>
+                        </span>
+                        <input type="search" name="q"
+                            class="form-control border border-start-0 border-gray-300 bg-white shadow-sm"
+                            placeholder="Tìm kiếm tin tức..." value="{{ request('q') }}">
+                        <button type="submit"
+                            class="btn btn-primary shadow-sm">
+                            Tìm
+                        </button>
+                    </div>
+                </form>
+            </div>
 
         </div>
 

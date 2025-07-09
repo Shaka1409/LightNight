@@ -29,7 +29,9 @@ class OrdersController extends Controller
                     ->orWhere('phone', 'like', "%$keyword%"); // số điện thoại
             });
         }
-
+        if ($request->filled('status') || $request->status === '0') {
+            $query->where('status', $request->status);
+        }
         $orders = $query->orderBy('created_at', 'desc')->paginate(10);
 
         return view('admin.orders.index', compact('orders'));
@@ -108,7 +110,6 @@ class OrdersController extends Controller
 
             // Cập nhật trạng thái đơn
             $order->update(['status' => $newStatus]);
-
         });
 
         // Gửi email thông báo đến người dùng
@@ -146,32 +147,31 @@ class OrdersController extends Controller
     }
 
     public function confirmPayment($id)
-{
-    $order = Orders::findOrFail($id);
+    {
+        $order = Orders::findOrFail($id);
 
-    if ($order->is_paid) {
-        return back()->with('error', 'Đơn hàng đã được xác nhận thanh toán.');
+        if ($order->is_paid) {
+            return back()->with('error', 'Đơn hàng đã được xác nhận thanh toán.');
+        }
+
+        $order->is_paid = 1;
+
+        // Cập nhật trạng thái nếu cần
+        // if ($order->status !== 'delivered') {
+        //     $order->status = 'delivered';
+        // }
+
+        $order->save();
+
+        // Gửi email thông báo đến người dùng
+        try {
+            Mail::to($order->user->email)->queue(
+                new ConfirmPayment($order) // Tên class viết hoa đúng chuẩn
+            );
+        } catch (\Exception $e) {
+            Log::error("Gửi email thất bại: " . $e->getMessage());
+        }
+
+        return back()->with('success', 'Đã xác nhận thanh toán cho đơn hàng #' . $order->id);
     }
-
-    $order->is_paid = 1;
-
-    // Cập nhật trạng thái nếu cần
-    // if ($order->status !== 'delivered') {
-    //     $order->status = 'delivered';
-    // }
-
-    $order->save();
-
-    // Gửi email thông báo đến người dùng
-    try {
-        Mail::to($order->user->email)->queue(
-            new ConfirmPayment($order) // Tên class viết hoa đúng chuẩn
-        );
-    } catch (\Exception $e) {
-        Log::error("Gửi email thất bại: " . $e->getMessage());
-    }
-
-    return back()->with('success', 'Đã xác nhận thanh toán cho đơn hàng #' . $order->id);
-}
-
 }

@@ -314,9 +314,7 @@
 @section('scripts')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // =============================== //
             //          SLIDER COMMENT         //
-            // =============================== //
             const commentSliderTrack = document.getElementById("slider-track");
             const commentNextBtn = document.getElementById("next-slide-cmt");
             const commentPrevBtn = document.getElementById("prev-slide-cmt");
@@ -366,9 +364,7 @@
             updateCommentSlider();
 
 
-            // ========================== //
             //     SLIDER - HERO BANNER   //
-            // ========================== //
             const heroSlider = document.getElementById('slider');
             const heroTrack = document.getElementById('sliderTrack');
             const dots = document.querySelectorAll('.slider-dot');
@@ -411,9 +407,7 @@
             showSlide(currentIndex);
 
 
-            // ============================= //
             //      SLIDER - SALE PRODUCT    //
-            // ============================= //
             const saleSlider = document.getElementById("sale-products-slider");
             const salePrevBtn = document.getElementById("prev-slide");
             const saleNextBtn = document.getElementById("next-slide");
@@ -444,9 +438,7 @@
             window.addEventListener("resize", updateSaleSlider);
             updateSaleSlider();
 
-            // ========================= //
             //     AJAX GIỎ HÀNG & MUA   //
-            // ========================= //
             const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
 
             function handleAddToCart(form) {
@@ -494,9 +486,7 @@
             });
 
 
-            // ======================== //
             //      MỞ / ĐÓNG MODAL     //
-            // ======================== //
             const openModalButtons = document.querySelectorAll('.openModal');
             const closeModalButtons = document.querySelectorAll('.closeModal');
 

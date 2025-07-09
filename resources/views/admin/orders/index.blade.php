@@ -1,42 +1,68 @@
 @extends('layout.admin')
 
 @section('content')
-    <div class="container mx-auto px-4 py-4">
-        
-         <div class="d-flex justify-content-between align-items-center mb-4 mr-4">
-            <h1 class="text-3xl font-bold mb-6">Danh sách Đơn Hàng</h1>
+    <div class="container px-4 py-5">
+        <div class="row align-items-center mb-4">
+            <div class="col">
+                <h1 class="display-5 fw-bold text-dark">Danh sách Đơn Hàng</h1>
+            </div>
+            <div class="col-auto">
+                <form action="{{ url()->current() }}" method="GET">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border border-end-0 border-gray-300">
+                            <i class="fa fa-search text-gray-500"></i>
+                        </span>
+                        <input type="search" name="q"
+                            class="form-control border border-start-0 border-gray-300 bg-white shadow-sm"
+                            placeholder="Tìm kiếm đơn hàng..." value="{{ request('q') }}">
+                        <button type="submit"
+                            class="btn btn-primary shadow-sm">
+                            Tìm
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-            <form action="{{ url()->current() }}" method="GET" class="mb-3">
-                <div class="input-group input-group-sm">
-                    <input type="search" name="q"
-                        class="form-control border border-warning rounded-start-pill bg-white shadow-sm"
-                        placeholder="Tìm kiếm..." value="{{ request('q') }}">
-                    <button type="submit" class="btn rounded-end-pill text-white fw-bold px-3"
-                        style="background-color: #fd7e14; box-shadow: 0 4px 12px rgba(253, 126, 20, 0.5);">
-                        <i class="fa fa-search me-1"></i> Tìm
-                    </button>
+        <!-- Bộ lọc theo trạng thái -->
+            <form method="GET" action="{{ route('admin.orders.index') }}"
+                class="row row-cols-lg-auto g-3 align-items-center mb-4">
+                <div class="col">
+                    <label for="status_filter" class="form-label mb-0 me-2 fw-medium text-dark">Trạng thái:</label>
+                    <select name="status" id="status_filter"
+                        class="form-select form-select-sm border-primary rounded-3 shadow-sm"
+                        onchange="this.form.submit()">
+                        <option value="" {{ request('status') === null || request('status') === '' ? 'selected' : '' }}>
+                            Tất cả</option>
+                        <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Chờ xử lý</option>
+                        <option value="processing" {{ request('status') === 'processing' ? 'selected' : '' }}>Đang xử lý</option>
+                        <option value="shipped" {{ request('status') === 'shipped' ? 'selected' : '' }}>Đang giao</option>
+                        <option value="delivered" {{ request('status') === 'delivered' ? 'selected' : '' }}>Hoàn thành</option>
+                        <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
+                    </select>
                 </div>
             </form>
 
-        </div>
         @if (request('q') && $orders->count() === 0)
-            <p class="text-danger mb-2 mt-2">Không tìm thấy kết quả cho: "{{ request('q') }}"</p>
+            <div class="alert alert-danger mb-4" role="alert">
+                Không tìm thấy kết quả cho: "{{ request('q') }}"
+            </div>
         @elseif (count($orders) > 0)
             @if (request('q') && $orders->count() > 0)
-                <p class="text-muted mb-2 mt-2">Kết quả tìm kiếm cho: "{{ request('q') }}"</p>
+                <p class="text-muted mb-4">Kết quả tìm kiếm cho: "{{ request('q') }}"</p>
             @endif
-            <div class="overflow-x-auto">
-                <table class="min-w-full bg-white border border-gray-300 table table-striped">
-                    <thead class="bg-gray-100">
+            <div class="table-responsive rounded-3 shadow-sm">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
                         <tr>
-                            <th class="py-3 px-4 text-left">Mã đơn hàng</th>
-                            <th class="py-3 px-4 text-left">Tổng giá</th>
-                            <th class="py-3 px-4 text-left">Ngày tạo</th>
-                            <th class="py-3 px-4 text-left">Trạng thái</th>
-                            <th class="py-3 px-4 text-left">Hành động</th>
+                            <th scope="col" class="py-3 px-4 text-left">Mã đơn hàng</th>
+                            <th scope="col" class="py-3 px-4 text-left">Tổng giá</th>
+                            <th scope="col" class="py-3 px-4 text-left">Ngày tạo</th>
+                            <th scope="col" class="py-3 px-4 text-left">Trạng thái</th>
+                            <th scope="col" class="py-3 px-4 text-left">Hành động</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-200">
+                    <tbody>
                         @foreach ($orders as $order)
                             <tr>
                                 <td class="py-3 px-4">#{{ $order->id }}</td>
@@ -47,36 +73,33 @@
                                         class="update-status-form">
                                         @csrf
                                         @method('PATCH')
-                                        <select name="status" class="form-select form-select-sm"
+                                        <select name="status"
+                                            class="form-select"
                                             onchange="this.form.submit()">
-                                            <option value="pending" {{ $order->status === 'pending' ? 'selected' : '' }}>Chờ
-                                                xử lý</option>
-                                            <option value="processing"
-                                                {{ $order->status === 'processing' ? 'selected' : '' }}>Đang xử lý</option>
-                                            <option value="shipped" {{ $order->status === 'shipped' ? 'selected' : '' }}>
-                                                Đang giao</option>
-                                            <option value="delivered"
-                                                {{ $order->status === 'delivered' ? 'selected' : '' }}>Hoàn thành</option>
-                                            <option value="cancelled"
-                                                {{ $order->status === 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
+                                            <option value="pending" {{ $order->status === 'pending' ? 'selected' : '' }}>Chờ xử lý</option>
+                                            <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>Đang xử lý</option>
+                                            <option value="shipped" {{ $order->status === 'shipped' ? 'selected' : '' }}>Đang giao</option>
+                                            <option value="delivered" {{ $order->status === 'delivered' ? 'selected' : '' }}>Hoàn thành</option>
+                                            <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
                                         </select>
                                     </form>
                                 </td>
                                 <td class="py-3 px-4">
                                     <a href="{{ route('admin.orders.show', $order->id) }}"
-                                        class="btn btn-info btn-sm hover:text-white">Xem chi tiết</a>
+                                        class="btn btn-primary btn-sm shadow-sm">
+                                        Xem chi tiết
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-                <!-- Hiển thị các nút phân trang -->
-                <div class="d-flex justify-content-center">
+                <div class="d-flex justify-content-center mt-4">
                     {{ $orders->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         @else
-            <p>Hiện chưa có đơn hàng cần xử lý!</p>
+            <p class="text-muted">Hiện chưa có đơn hàng cần xử lý!</p>
         @endif
     </div>
 @endsection

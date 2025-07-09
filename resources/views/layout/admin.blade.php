@@ -91,6 +91,15 @@
                     <span class="sidebar-label">AdminDashboard</span>
                 </a>
             </div>
+            
+            <div class="mb-4">
+                <a href="/"
+                   class="text-white fw-bold fs-5 text-decoration-none d-flex align-items-center">
+                    <i class="fa-solid fa-house me-2"></i>
+                    <span class="sidebar-label">Về trang chủ</span>
+                </a>
+            </div>
+
 
             @php $url = url()->current(); @endphp
 

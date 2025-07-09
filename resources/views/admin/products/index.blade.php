@@ -6,17 +6,22 @@
         <div class="d-flex justify-content-between align-items-center mb-4 mr-4">
             <h1 class="mb-4">Quản Lý Sản Phẩm</h1>
 
-            <form action="{{ url()->current() }}" method="GET" class="mb-3">
-                <div class="input-group input-group-sm">
-                    <input type="search" name="q"
-                        class="form-control border border-warning rounded-start-pill bg-white shadow-sm"
-                        placeholder="Tìm kiếm..." value="{{ request('q') }}">
-                    <button type="submit" class="btn rounded-end-pill text-white fw-bold px-3"
-                        style="background-color: #fd7e14; box-shadow: 0 4px 12px rgba(253, 126, 20, 0.5);">
-                        <i class="fa fa-search me-1"></i> Tìm
-                    </button>
-                </div>
-            </form>
+            <div class="col-auto">
+                <form action="{{ url()->current() }}" method="GET">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border border-end-0 border-gray-300">
+                            <i class="fa fa-search text-gray-500"></i>
+                        </span>
+                        <input type="search" name="q"
+                            class="form-control border border-start-0 border-gray-300 bg-white shadow-sm"
+                            placeholder="Tìm kiếm sản phẩm..." value="{{ request('q') }}">
+                        <button type="submit"
+                            class="btn btn-primary shadow-sm">
+                            Tìm
+                        </button>
+                    </div>
+                </form>
+            </div>
 
         </div>
 
@@ -24,7 +29,7 @@
         <form method="GET" action="{{ route('product.index') }}" class="row row-cols-lg-auto g-3 align-items-center mb-3">
             <div class="col">
                 <label for="category_filter" class="form-label mb-0 me-2">Danh mục:</label>
-                <select name="category" id="category_filter" class="form-select form-select-sm"
+                <select name="category" id="category_filter" class="form-select form-select-sm border-primary rounded-3 shadow-sm"
                     onchange="this.form.submit()">
                     <option value="">Tất cả</option>
                     @foreach ($categories as $category)
@@ -37,7 +42,7 @@
 
             <div class="col">
                 <label for="status_filter" class="form-label mb-0 me-2">Trạng thái:</label>
-                <select name="status" id="status_filter" class="form-select form-select-sm" onchange="this.form.submit()">
+                <select name="status" id="status_filter" class="form-select form-select-sm border-primary rounded-3 shadow-sm" onchange="this.form.submit()">
                     <option value="" {{ request('status') === null || request('status') === '' ? 'selected' : '' }}>
                         Tất cả</option>
                     <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Nổi bật</option>

@@ -43,14 +43,8 @@ Route::middleware('guest')->group(function () {
     // Hiển thị form đăng nhập
     Route::get('/login', [LoginController::class, 'formLogin'])->name('login');
 
-    // Hiển thị form đăng nhập
-    Route::get('/loginAdmin', [LoginController::class, 'formLoginAdmin'])->name('loginAdmin');
-
     // Xử lý đăng nhập (POST)
     Route::post('/login', [LoginController::class, 'login']);
-
-    // Xử lý đăng nhập (POST)
-    Route::post('/loginAdmin', [LoginController::class, 'loginAdmin']);
 
     // Hiển thị form đăng ký
     Route::get('/register', [RegisterController::class, 'register'])->name('register');
