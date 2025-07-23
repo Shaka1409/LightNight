@@ -77,8 +77,6 @@ Route::middleware('auth')->group(function () {
 
     Route::put('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
 
-    Route::delete('/profile/delete', [ProfileController::class, 'deleteAccount'])->name('profile.delete');
-
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 
     Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');

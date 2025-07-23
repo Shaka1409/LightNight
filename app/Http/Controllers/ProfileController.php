@@ -40,15 +40,6 @@ class ProfileController extends Controller
         return back()->with('success', 'Đổi mật khẩu thành công!');
     }
 
-    public function deleteAccount()
-    {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        Auth::logout();
-        $user->delete();
-
-        return redirect('/')->with('success', 'Tài khoản đã bị xóa!');
-    }
 
     public function checkEmailExists(Request $request)
     {

@@ -18,12 +18,10 @@ class OrderDetailsController extends Controller
 {
     public function index()
     {
-        // Lấy danh sách đơn hàng của user hiện tại, bao gồm thông tin sản phẩm trong đơn
-        $orders = Orders::where('user_id', Auth::id())
-            ->with(['details.product']) // Lấy thông tin sản phẩm trong đơn
-            ->latest()
+        $orders = Orders::where('user_id', auth()->id())
+            ->where('hidden_by_user', false)
+            ->with('details.product')
             ->get();
-
         return view('orders', compact('orders'));
     }
 
@@ -83,21 +81,23 @@ class OrderDetailsController extends Controller
     }
 
 
+       
     public function deleteCancelledOrder(Orders $order)
     {
         // Kiểm tra quyền sở hữu đơn hàng
         if ($order->user_id !== Auth::id()) {
             return redirect()->back()->with('error', 'Bạn không có quyền xóa đơn hàng này.');
         }
-
-        // Chỉ cho phép xóa đơn hàng nếu trạng thái là "cancelled"
+    
+        // Chỉ cho phép ẩn đơn hàng nếu trạng thái là "cancelled" hoặc "delivered"
         if ($order->status !== 'cancelled' && $order->status !== 'delivered') {
-            return redirect()->back()->with('error', 'Chỉ có thể xóa đơn hàng đã hủy hoặc đã nhận.');
+            return redirect()->back()->with('error', 'Chỉ có thể ẩn đơn hàng đã hủy hoặc đã nhận.');
         }
-
-        // Xóa đơn hàng
-        $order->delete();
-
-        return redirect()->back()->with('success', 'Đơn hàng đã được xóa thành công.');
+    
+        // Đánh dấu đơn hàng đã bị ẩn bởi user
+        $order->hidden_by_user = true;
+        $order->save();
+    
+        return redirect()->back()->with('success', 'Đơn hàng đã được xoá khỏi lịch sửa của bạn.');
     }
 }

@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('status')->default('pending');
             $table->string('shipper_name')->nullable();
             $table->string('shipper_phone', 20)->nullable();
+            $table->boolean('hidden_by_user')->default(false);
             $table->timestamps();
         });
     }

@@ -72,17 +72,6 @@
                     Đổi mật khẩu
                 </button>
             </form>
-
-            <!-- Xóa tài khoản -->
-            <form action="{{ route('profile.delete') }}" method="POST" 
-                  onsubmit="return confirm('Bạn có chắc chắn muốn xóa tài khoản?');">
-                @csrf
-                @method('DELETE')
-
-                <button type="submit" class="w-full bg-red-600 text-white px-4 py-2 rounded sm:hover:bg-red-700">
-                    Xóa tài khoản
-                </button>
-            </form>
         </div>
     </div>
 </div>

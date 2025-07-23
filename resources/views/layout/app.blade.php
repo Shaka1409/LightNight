@@ -15,7 +15,7 @@
     <!-- AOS Library -->
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
 
-    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/logo.ico">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="images/logo.ico">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 

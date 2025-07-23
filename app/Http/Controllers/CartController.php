@@ -80,7 +80,6 @@ class CartController extends Controller
         'message' => 'Sản phẩm đã được thêm vào giỏ hàng thành công!',
     ]);
 }
-    
 
     /**
      * Cập nhật số lượng sản phẩm trong giỏ.

@@ -141,7 +141,7 @@
                         <div id="bank-transfer-info" class="hidden mb-6">
                             <div class="bg-gray-100 p-4 rounded border border-blue-300">
                                 <p class="text-sm mb-2">Quét mã QR hoặc chuyển khoản theo thông tin:</p>
-                                <img src="{{ asset('images/qr-code.png') }}" alt="QR chuyển khoản" class="w-40 h-40 mb-3">
+                                <img src="{{ asset('/image/Qr-code.png') }}" alt="QR chuyển khoản" class="w-40 h-40 mb-3">
 
                                 <p><strong>Ngân hàng:</strong> MBBank</p>
                                 <p><strong>STK:</strong> 8140920048</p>

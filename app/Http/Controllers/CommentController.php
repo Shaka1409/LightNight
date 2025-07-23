@@ -77,11 +77,21 @@ class CommentController extends Controller
     public function updateStatus(Request $request, $comment)
     {
         $comment = Comment::findOrFail($comment);
-        $comment->status = $request->input('status');
+        $newStatus = (int) $request->input('status');
+
+        // Không cho phép quay lại trạng thái "chờ kiểm duyệt" (1)
+        if ($newStatus == 1 && $comment->status != 1) {
+            return redirect()->route('admin.comments.index')
+                ->with('error', 'Không thể quay lại trạng thái chờ kiểm duyệt!');
+        }
+
+        $comment->status = $newStatus;
         $comment->save();
 
-        return redirect()->route('admin.comments.index')->with('success', 'Cập nhật trạng thái thành công!');
+        return redirect()->route('admin.comments.index')
+            ->with('success', 'Cập nhật trạng thái thành công!');
     }
+
     /**
      * Xoá bình luận.
      *

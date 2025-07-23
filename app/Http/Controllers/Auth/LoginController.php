@@ -28,10 +28,10 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             // nếu lf admin chuyển hướng vào admin dashboard
-            // $user = Auth::user();
-            // if ($user->role === 'admin') {
-            //     return redirect()->route('admin.dashboard')->with('success', 'Bạn đã đăng đăng nhập thành công.');
-            // }
+            $user = Auth::user();
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard')->with('success', 'Bạn đã đăng đăng nhập thành công.');
+            }
             return redirect()->intended('/')->with('success', 'Bạn đã đăng đăng nhập thành công.');
             
         }
