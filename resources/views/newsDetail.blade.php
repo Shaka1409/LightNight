@@ -47,7 +47,7 @@
             <div class="space-y-4 md:space-y-6">
                 @foreach (array_merge($previousNews->toArray(), $nextNews->toArray()) as $relatednew)
                     <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                        <a href="{{ route('new', $relatednew['id']) }}" class="block">
+                        <a href="{{ route('newsDetail', $relatednew['id']) }}" class="block">
                             @if ($relatednew['image'])
                                 <img src="{{ asset('storage/' . $relatednew['image']) }}" 
                                      alt="{{ $relatednew['name'] }}" 

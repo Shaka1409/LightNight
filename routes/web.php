@@ -29,6 +29,13 @@ Route::get('/home', [PagesController::class, 'index'])->name('home');
 
 Route::get('/news', [PagesController::class, 'news'])->name('news');
 
+Route::get('/new/{id}', [PagesController::class, 'newsDetail'])->name('newsDetail');
+
+Route::get('/contact', [ContactController::class, 'contact'])->name('contact');
+
+Route::post('/contact/send', [ContactController::class, 'sendContact'])->name('contact.send');
+
+
 Route::get('/product', [PagesController::class, 'show'])->name('product.show');
 
 Route::get('/san-pham/{slug}', [PagesController::class, 'detail'])->name('product.detail');
@@ -61,13 +68,6 @@ Route::middleware('guest')->group(function () {
     Route::get('/password/new', [CustomForgotPasswordController::class, 'showResetForm'])->name('otp.new.form');
     Route::post('/password/new', [CustomForgotPasswordController::class, 'resetPassword'])->name('otp.reset');
 });
-
-Route::get('/new/{id}', [PagesController::class, 'new'])->name('new');
-
-Route::get('/contact', [ContactController::class, 'contact'])->name('contact');
-
-Route::post('/contact/send', [ContactController::class, 'sendContact'])->name('contact.send');
-
 
 Route::middleware('auth')->group(function () {
 

@@ -132,7 +132,7 @@ class PagesController extends Controller
         return view('news', compact('news', 'banners'));
     }
 
-    public function new($id)
+    public function newsDetail($id)
     {
         // Lấy new hiện tại theo ID
         $new = News::findOrFail($id);
@@ -150,6 +150,6 @@ class PagesController extends Controller
             ->get();
 
         // Trả về view và truyền cả New, previousNews và nextNews vào
-        return view('new', compact('new', 'previousNews', 'nextNews'));
+        return view('newsDetail', compact('new', 'previousNews', 'nextNews'));
     }
 }
